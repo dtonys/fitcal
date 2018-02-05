@@ -1,8 +1,8 @@
 {
-  "name": "universal-web-boilerplate",
+  "name": "fitcal",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:dtonys/universal-web-boilerplate.git",
+  "repository": "git@github.com:dtonys/fitcal.git",
   "author": "dtonys@gmail.com <dtonys@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -12,8 +12,8 @@
     "build-client": "cross-env NODE_ENV=production webpack --env production --progress -p --config webpack/webpack.client.config.js",
     "build-server": "cross-env NODE_ENV=production webpack --env production --progress -p --config webpack/webpack.server.config.js",
     "build-node": "cross-env NODE_ENV=production babel src/server -d build/server",
-    "start": "cross-env NODE_ENV=production forever start --uid universal-web --append build/server/server.js",
-    "stop": "forever stop universal-web",
+    "start": "cross-env NODE_ENV=production forever start --uid fitcal --append build/server/server.js",
+    "stop": "forever stop fitcal",
     "clean": "rimraf build/client build/server",
     "test": "jest --config jest.config.js",
     "lint-js": "eslint -c .eslintrc.js ./src"

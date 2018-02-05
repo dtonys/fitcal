@@ -54,17 +54,17 @@ class Navbar extends Component {
                   top: '5px',
                 }}
               >
-                ⚪
+                FitCal
               </Link>
             </Typography>
-            <Link to="/admin/users">
-              <Button color="contrast">Admin</Button>
-            </Link>
-            <Link to="/users">
-              <Button color="contrast">Users</Button>
-            </Link>
             { user &&
               <div>
+                <Link to="/admin/users">
+                  <Button color="contrast">Admin</Button>
+                </Link>
+                <Link to="/users">
+                  <Button color="contrast">Users</Button>
+                </Link>
                 <Button color="contrast" onClick={this.logout} >Logout</Button>
                 <Typography
                   type="subheading"
