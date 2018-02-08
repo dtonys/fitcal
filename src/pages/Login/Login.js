@@ -7,6 +7,7 @@ import styles from 'pages/Login/Login.scss';
 import TextInput from 'components/TextInput/TextInput';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import Link from 'redux-first-router-link';
 
 import {
   required as isRequired,
@@ -100,6 +101,16 @@ class LoginPage extends Component {
               >
                 { loading ? 'Submitting...' : 'Submit' }
               </Button>
+              <br />
+              <br />
+              <Link to="/lost-password">
+                <Typography
+                  type="body1"
+                  align="left"
+                >
+                  Forgot Password?
+                </Typography>
+              </Link>
             </form>
           )}
         </Form>

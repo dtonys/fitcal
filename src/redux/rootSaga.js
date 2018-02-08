@@ -4,11 +4,13 @@ import {
 } from 'redux-saga/effects';
 import demoSaga from 'redux/demo/saga';
 import userSaga from 'redux/user/saga';
+import lostPasswordSaga from 'redux/lost-password/saga';
 
 
 export default function* rootSaga(context) {
   yield all([
     fork(demoSaga, context),
     fork(userSaga, context),
+    fork(lostPasswordSaga, context),
   ]);
 }

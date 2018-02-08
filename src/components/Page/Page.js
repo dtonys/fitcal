@@ -14,6 +14,8 @@ import {
   ROUTE_USER_DETAIL,
   ROUTE_USER_DETAIL_TAB,
   ROUTE_ADMIN_USERS,
+  ROUTE_LOST_PASSWORD,
+  ROUTE_RESET_PASSWORD,
 } from 'redux/routesMap';
 
 
@@ -28,6 +30,8 @@ const NotFoundPage = universal(import('pages/NotFound/NotFound'), options);
 const ReduxDemoPage = universal(import('pages/ReduxDemo/ReduxDemo'), options);
 const UsersListPage = universal(import('pages/UsersList/UsersList'), options);
 const UserDetailPage = universal(import('pages/UserDetail/UserDetail'), options);
+const LostPasswordPage = universal(import('pages/LostPassword/LostPassword'), options);
+const ResetPasswordPage = universal(import('pages/ResetPassword/ResetPassword'), options);
 
 const actionToPage = {
   [ROUTE_HOME]: HomePage,
@@ -38,6 +42,8 @@ const actionToPage = {
   [ROUTE_USER_DETAIL]: UserDetailPage,
   [ROUTE_USER_DETAIL_TAB]: UserDetailPage,
   [ROUTE_ADMIN_USERS]: UsersListPage,
+  [ROUTE_LOST_PASSWORD]: LostPasswordPage,
+  [ROUTE_RESET_PASSWORD]: ResetPasswordPage,
   [NOT_FOUND]: NotFoundPage,
 };
 const getPageFromRoute = ( routeAction ) => {

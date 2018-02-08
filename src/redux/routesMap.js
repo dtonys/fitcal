@@ -11,6 +11,8 @@ export const ROUTE_USERS = 'ROUTE_USERS';
 export const ROUTE_USER_DETAIL = 'ROUTE_USER_DETAIL';
 export const ROUTE_USER_DETAIL_TAB = 'ROUTE_USER_DETAIL_TAB';
 export const ROUTE_ADMIN_USERS = 'ROUTE_ADMIN_USERS';
+export const ROUTE_LOST_PASSWORD = 'ROUTE_LOST_PASSWORD';
+export const ROUTE_RESET_PASSWORD = 'ROUTE_RESET_PASSWORD';
 
 import {
   extractUserState,
@@ -66,6 +68,12 @@ const routesMap = {
     thunk: async (dispatch) => {
       dispatch({ type: LOAD_USERS_REQUESTED });
     },
+  },
+  [ROUTE_LOST_PASSWORD]: {
+    path: '/lost-password',
+  },
+  [ROUTE_RESET_PASSWORD]: {
+    path: '/reset-password',
   },
   [NOT_FOUND]: {
     path: '/not-found',
