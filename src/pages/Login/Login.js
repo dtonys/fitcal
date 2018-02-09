@@ -55,7 +55,7 @@ class LoginPage extends Component {
               data-test="loginForm"
             >
               <Typography type="headline" align="center" gutterBottom >
-                Login
+                Trainer login
               </Typography>
               { error &&
                 <div>

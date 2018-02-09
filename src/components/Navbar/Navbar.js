@@ -54,7 +54,7 @@ class Navbar extends Component {
                   top: '5px',
                 }}
               >
-                FitCal
+                🍑 Team Sweet Cheeks
               </Link>
             </Typography>
             { user &&

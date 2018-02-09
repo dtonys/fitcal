@@ -23,7 +23,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
     return (
       <div className={ styles.wrap } >
         <Typography type="display2" color="primary" gutterBottom >
-          FitCal
+          Team Sweet Cheeks
         </Typography>
         <br />
       </div>
