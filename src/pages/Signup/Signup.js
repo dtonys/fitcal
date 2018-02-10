@@ -22,12 +22,35 @@ import {
 } from 'redux/user/reducer';
 
 
+async function checkAvailableUsername( value ) {
+  const error = composeValidators(isRequired, isMinLength(3))(value);
+  if ( error ) return error;
+  const response = await fetch('/api/username/' + encodeURIComponent(value) + '/available');
+  const { data: available } = await response.json();
+  if ( !available ) {
+    return 'Username not available';
+  }
+  return undefined;
+}
+
+async function checkAvailableEmail( value ) {
+  const error = composeValidators(isRequired, isEmail)(value);
+  if ( error ) return error;
+  const response = await fetch('/api/email/' + encodeURIComponent(value) + '/available');
+  const { data: available } = await response.json();
+  if ( !available ) {
+    return 'Email not available';
+  }
+  return undefined;
+}
+
 const InfoView = ({
   submitForm,
   error,
 }) => (
   <Form
     onSubmit={ submitForm }
+    validateOnBlur
   >
     {({ handleSubmit }) => (
       <form
@@ -55,6 +78,7 @@ const InfoView = ({
         <Field
           name="first_name"
           component={TextInput}
+          validate={isRequired}
           className={styles.textField}
           label="first name"
           type="text"
@@ -63,6 +87,7 @@ const InfoView = ({
         <Field
           name="last_name"
           component={TextInput}
+          validate={isRequired}
           className={styles.textField}
           label="last name"
           type="text"
@@ -71,6 +96,7 @@ const InfoView = ({
         <Field
           name="username"
           component={TextInput}
+          validate={checkAvailableUsername}
           className={styles.textField}
           label="username"
           type="text"
@@ -78,7 +104,7 @@ const InfoView = ({
         />
         <Field
           name="phone"
-          validate={composeValidators(isRequired)}
+          validate={isRequired}
           component={TextInput}
           className={styles.textField}
           label="phone"
@@ -87,7 +113,7 @@ const InfoView = ({
         />
         <Field
           name="email"
-          validate={composeValidators(isRequired, isEmail)}
+          validate={checkAvailableEmail}
           component={TextInput}
           className={styles.textField}
           label="email"
