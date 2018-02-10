@@ -1,5 +1,5 @@
 import lodashGet from 'lodash/get';
-import { put, call, fork, all, select } from 'redux-saga/effects';
+import { put, call, fork, all } from 'redux-saga/effects';
 import { takeOne } from 'redux/sagaHelpers';
 
 import {

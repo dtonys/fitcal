@@ -46,7 +46,7 @@ async function checkAvailableEmail( value ) {
 
 const InfoView = ({
   submitForm,
-  error,
+
 }) => (
   <Form
     onSubmit={ submitForm }
@@ -61,20 +61,7 @@ const InfoView = ({
         <Typography type="headline" align="center" gutterBottom >
           Trainer sign up
         </Typography>
-        { error &&
-          <div>
-            <br />
-            <Typography
-              color="error"
-              type="subheading"
-              align="center"
-              gutterBottom
-              data-test="serverError"
-            >
-              {error}
-            </Typography>
-          </div>
-        }
+
         <Field
           name="first_name"
           component={TextInput}
@@ -153,6 +140,7 @@ InfoView.defaultProps = {
 const PaymentView = ({
   submitPayment,
   loading,
+  error,
 }) => (
   <div>
     <Typography type="body1" align="center" gutterBottom >
@@ -161,6 +149,20 @@ const PaymentView = ({
     <Typography type="body1" align="center" gutterBottom >
       Price: 10$
     </Typography>
+    { error &&
+      <div>
+        <br />
+        <Typography
+          color="error"
+          type="subheading"
+          align="center"
+          gutterBottom
+          data-test="serverError"
+        >
+          {error}
+        </Typography>
+      </div>
+    }
     <br />
     <Button
       raised
@@ -177,6 +179,10 @@ const PaymentView = ({
 PaymentView.propTypes = {
   submitPayment: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+};
+PaymentView.defaultProps = {
+  error: null,
 };
 
 @connect(
@@ -228,13 +234,13 @@ class SignupPage extends Component {
         { step === 1 &&
           <InfoView
             submitForm={this.submitInfo}
-            error={error}
           />
         }
         { step === 2 &&
           <PaymentView
             submitPayment={this.submitPayment}
             loading={loading}
+            error={error}
           />
         }
       </div>

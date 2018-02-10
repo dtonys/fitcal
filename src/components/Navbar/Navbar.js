@@ -40,7 +40,7 @@ class Navbar extends Component {
 
     return (
       <div className="navbar-fixed" >
-        <AppBar position="fixed" >
+        <AppBar position="fixed" color="accent" elevation={1}>
           <Toolbar className={styles.toolBar} >
             <Typography
               type="title"
@@ -49,23 +49,26 @@ class Navbar extends Component {
             >
               <Link to="/"
                 style={{
-                  fontSize: '40px',
+                  fontSize: '16px',
                   position: 'relative',
-                  top: '5px',
+                  top: '0px',
+                  display: 'block',
+                  width: '100px',
+                  color: '#000',
                 }}
               >
-                🍑 Team Sweet Cheeks
+                Team Sweetcheecks
               </Link>
             </Typography>
             { user &&
               <div>
                 <Link to="/admin/users">
-                  <Button color="contrast">Admin</Button>
+                  <Button color="primary">Admin</Button>
                 </Link>
                 <Link to="/users">
-                  <Button color="contrast">Users</Button>
+                  <Button color="primary">Users</Button>
                 </Link>
-                <Button color="contrast" onClick={this.logout} >Logout</Button>
+                <Button color="primary" onClick={this.logout} >Logout</Button>
                 <Typography
                   type="subheading"
                   color="inherit"
@@ -78,10 +81,10 @@ class Navbar extends Component {
             { !user &&
               <div>
                 <Link to="/login">
-                  <Button color="contrast">Login</Button>
+                  <Button color="primary">Login</Button>
                 </Link>
                 <Link to="/signup">
-                  <Button color="contrast">Signup</Button>
+                  <Button color="primary">Signup</Button>
                 </Link>
               </div>
             }
