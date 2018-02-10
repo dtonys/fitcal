@@ -47,7 +47,7 @@ class Navbar extends Component {
               color="inherit"
               className={styles.middleContent}
             >
-              <Link to="/"
+              <Link to={ user ? '/trainer/schedule' : '/' }
                 style={{
                   fontSize: '16px',
                   position: 'relative',
@@ -62,20 +62,15 @@ class Navbar extends Component {
             </Typography>
             { user &&
               <div>
-                <Link to="/admin/users">
-                  <Button color="primary">Admin</Button>
+                <Link to="/trainer/schedule">
+                  <Button color="primary" >Schedule</Button>
                 </Link>
-                <Link to="/users">
-                  <Button color="primary">Users</Button>
+                <Link to="/trainer/profile">
+                  <Button color="primary">
+                    { user.email.substr(0, user.email.indexOf('@')) }
+                  </Button>
                 </Link>
                 <Button color="primary" onClick={this.logout} >Logout</Button>
-                <Typography
-                  type="subheading"
-                  color="inherit"
-                  style={{ display: 'inline-flex' }}
-                >
-                  { user.email.substr(0, user.email.indexOf('@')) }
-                </Typography>
               </div>
             }
             { !user &&

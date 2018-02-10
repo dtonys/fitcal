@@ -1,0 +1,20 @@
+.cta__button {
+  margin-right: 10px;
+}
+
+.schedule__wrap {
+  position: relative;
+}
+
+.hourAxis {
+  position: absolute;
+  left: -50px;
+  width: 50px;
+  top: 0;
+  padding: 8px;
+}
+
+.hourUnit {
+  height: 50px;
+  border-bottom: solid black 1px;
+}

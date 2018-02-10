@@ -12,6 +12,7 @@ import {
 } from './actions';
 import {
   ROUTE_HOME,
+  ROUTE_TRAINER_SCHEDULE,
 } from 'redux/routesMap';
 
 
@@ -46,7 +47,7 @@ function* login(action, context) {
     yield* loadUser(null, context);
     const globalState = yield select();
     const nextAction = lodashGet(globalState, 'location.query.next');
-    const nextActionParsed = nextAction ? JSON.parse(nextAction) : { type: ROUTE_HOME };
+    const nextActionParsed = nextAction ? JSON.parse(nextAction) : { type: ROUTE_TRAINER_SCHEDULE };
     yield put( redirect( nextActionParsed ) );
   }
   catch ( httpError ) {
@@ -65,7 +66,7 @@ function* signup(action, context) {
     });
     yield put({ type: SIGNUP_SUCCESS });
     yield* loadUser(null, context);
-    yield put( redirect({ type: ROUTE_HOME }) );
+    yield put( redirect({ type: ROUTE_TRAINER_SCHEDULE }) );
   }
   catch ( httpError ) {
     const httpErrorMessage = lodashGet( httpError, 'error.message' );
