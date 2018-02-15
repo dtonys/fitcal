@@ -44,9 +44,11 @@ async function checkAvailableEmail( value ) {
   return undefined;
 }
 
+
 const InfoView = ({
   submitForm,
-
+  error,
+  loading,
 }) => (
   <Form
     onSubmit={ submitForm }
@@ -59,9 +61,22 @@ const InfoView = ({
         data-test="signupForm"
       >
         <Typography type="headline" align="center" gutterBottom >
-          Trainer sign up
+          Sign up
         </Typography>
-
+        { error &&
+          <div>
+            <br />
+            <Typography
+              color="error"
+              type="subheading"
+              align="center"
+              gutterBottom
+              data-test="serverError"
+            >
+              {error}
+            </Typography>
+          </div>
+        }
         <Field
           name="first_name"
           component={TextInput}
@@ -122,8 +137,9 @@ const InfoView = ({
           color="primary"
           fullWidth
           type="submit"
+          disabled={loading}
         >
-          Next
+          { loading ? 'Submitting...' : 'Submit' }
         </Button>
       </form>
     )}
@@ -132,56 +148,9 @@ const InfoView = ({
 InfoView.propTypes = {
   submitForm: PropTypes.func.isRequired,
   error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
 };
 InfoView.defaultProps = {
-  error: null,
-};
-
-const PaymentView = ({
-  submitPayment,
-  loading,
-  error,
-}) => (
-  <div>
-    <Typography type="body1" align="center" gutterBottom >
-      Enter your payment details below
-    </Typography>
-    <Typography type="body1" align="center" gutterBottom >
-      Price: 10$
-    </Typography>
-    { error &&
-      <div>
-        <br />
-        <Typography
-          color="error"
-          type="subheading"
-          align="center"
-          gutterBottom
-          data-test="serverError"
-        >
-          {error}
-        </Typography>
-      </div>
-    }
-    <br />
-    <Button
-      raised
-      color="primary"
-      fullWidth
-      type="submit"
-      disabled={loading}
-      onClick={() => { submitPayment(); }}
-    >
-      { loading ? 'Submitting...' : 'Pay' }
-    </Button>
-  </div>
-);
-PaymentView.propTypes = {
-  submitPayment: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-};
-PaymentView.defaultProps = {
   error: null,
 };
 
@@ -196,53 +165,22 @@ class SignupPage extends Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  constructor( props ) {
-    super(props);
-    this.state = {
-      step: 1,
-      signupData: {},
-    };
-  }
-
-  submitInfo = ( values ) => {
-    this.setState({
-      ...this.state,
-      signupData: {
-        ...this.state.signupData,
-        ...values,
-      },
-      step: 2,
-    });
-  }
-
-  submitPayment = ( paymentToken = 'mock_token' ) => {
-    const apiValues = {
-      ...this.state.signupData,
-      paymentToken,
-    };
-    this.props.dispatch({ type: SIGNUP_REQUESTED, payload: apiValues });
+  submitPayment = ( values ) => {
+    this.props.dispatch({ type: SIGNUP_REQUESTED, payload: values });
   }
 
   render() {
-    const { step } = this.state;
     const {
       signup: { error, loading },
     } = this.props;
 
     return (
       <div className={styles.formWrap}>
-        { step === 1 &&
-          <InfoView
-            submitForm={this.submitInfo}
-          />
-        }
-        { step === 2 &&
-          <PaymentView
-            submitPayment={this.submitPayment}
-            loading={loading}
-            error={error}
-          />
-        }
+        <InfoView
+          submitForm={this.submitPayment}
+          error={error}
+          loading={loading}
+        />
       </div>
     );
   }
