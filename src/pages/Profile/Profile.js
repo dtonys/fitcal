@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 
 
-class TrainerProfilePage extends Component {
+class ProfilePage extends Component {
   render() {
     return (
       <div>
@@ -36,4 +36,4 @@ class TrainerProfilePage extends Component {
     );
   }
 }
-export default TrainerProfilePage;
+export default ProfilePage;

@@ -16,8 +16,8 @@ import {
   ROUTE_ADMIN_USERS,
   ROUTE_LOST_PASSWORD,
   ROUTE_RESET_PASSWORD,
-  ROUTE_TRAINER_PROFILE,
-  ROUTE_TRAINER_SCHEDULE,
+  ROUTE_PROFILE,
+  ROUTE_SCHEDULE,
 } from 'redux/routesMap';
 
 
@@ -34,8 +34,8 @@ const UsersListPage = universal(import('pages/UsersList/UsersList'), options);
 const UserDetailPage = universal(import('pages/UserDetail/UserDetail'), options);
 const LostPasswordPage = universal(import('pages/LostPassword/LostPassword'), options);
 const ResetPasswordPage = universal(import('pages/ResetPassword/ResetPassword'), options);
-const TrainerProfilePage = universal(import('pages/TrainerProfile/TrainerProfile'), options);
-const TrainerSchedulePage = universal(import('pages/TrainerSchedule/TrainerSchedule'), options);
+const ProfilePage = universal(import('pages/Profile/Profile'), options);
+const SchedulePage = universal(import('pages/Schedule/Schedule'), options);
 
 const actionToPage = {
   [ROUTE_HOME]: HomePage,
@@ -48,8 +48,8 @@ const actionToPage = {
   [ROUTE_ADMIN_USERS]: UsersListPage,
   [ROUTE_LOST_PASSWORD]: LostPasswordPage,
   [ROUTE_RESET_PASSWORD]: ResetPasswordPage,
-  [ROUTE_TRAINER_PROFILE]: TrainerProfilePage,
-  [ROUTE_TRAINER_SCHEDULE]: TrainerSchedulePage,
+  [ROUTE_PROFILE]: ProfilePage,
+  [ROUTE_SCHEDULE]: SchedulePage,
   [NOT_FOUND]: NotFoundPage,
 };
 const getPageFromRoute = ( routeAction ) => {

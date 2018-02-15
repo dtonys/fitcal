@@ -13,8 +13,8 @@ export const ROUTE_USER_DETAIL_TAB = 'ROUTE_USER_DETAIL_TAB';
 export const ROUTE_ADMIN_USERS = 'ROUTE_ADMIN_USERS';
 export const ROUTE_LOST_PASSWORD = 'ROUTE_LOST_PASSWORD';
 export const ROUTE_RESET_PASSWORD = 'ROUTE_RESET_PASSWORD';
-export const ROUTE_TRAINER_PROFILE = 'ROUTE_TRAINER_PROFILE';
-export const ROUTE_TRAINER_SCHEDULE = 'ROUTE_TRAINER_SCHEDULE';
+export const ROUTE_PROFILE = 'ROUTE_PROFILE';
+export const ROUTE_SCHEDULE = 'ROUTE_SCHEDULE';
 
 import {
   extractUserState,
@@ -77,11 +77,11 @@ const routesMap = {
   [ROUTE_RESET_PASSWORD]: {
     path: '/reset-password',
   },
-  [ROUTE_TRAINER_PROFILE]: {
-    path: '/trainer/profile',
+  [ROUTE_PROFILE]: {
+    path: '/profile',
   },
-  [ROUTE_TRAINER_SCHEDULE]: {
-    path: '/trainer/schedule',
+  [ROUTE_SCHEDULE]: {
+    path: '/schedule',
   },
   [NOT_FOUND]: {
     path: '/not-found',

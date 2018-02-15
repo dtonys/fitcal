@@ -5,10 +5,10 @@ import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-import styles from  'pages/TrainerSchedule/TrainerSchedule.scss';
+import styles from  'pages/Schedule/Schedule.scss';
 
 
-class TrainerSchedulePage extends Component {
+class SchedulePage extends Component {
   render() {
     const _6AM_6PM = [ 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5 ];
     const _Sun_Sat = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
@@ -83,4 +83,4 @@ class TrainerSchedulePage extends Component {
     );
   }
 }
-export default TrainerSchedulePage;
+export default SchedulePage;
