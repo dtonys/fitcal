@@ -15,6 +15,7 @@ export function extractSignupState( globalState ) {
 const signupInitialState = {
   loading: false,
   error: null,
+  success: false,
 };
 function signupReducer( state = signupInitialState, action ) {
   switch ( action.type ) {
@@ -29,6 +30,7 @@ function signupReducer( state = signupInitialState, action ) {
         ...state,
         loading: false,
         error: null,
+        success: true,
       };
     }
     case SIGNUP_ERROR: {

@@ -65,8 +65,6 @@ function* signup(action, context) {
       body: action.payload,
     });
     yield put({ type: SIGNUP_SUCCESS });
-    yield* loadUser(null, context);
-    yield put( redirect({ type: ROUTE_SCHEDULE }) );
   }
   catch ( httpError ) {
     const httpErrorMessage = lodashGet( httpError, 'error.message' );

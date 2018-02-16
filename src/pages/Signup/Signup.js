@@ -154,6 +154,7 @@ InfoView.defaultProps = {
   error: null,
 };
 
+
 @connect(
   ( globalState ) => ({
     signup: extractSignupState(globalState),
@@ -171,16 +172,29 @@ class SignupPage extends Component {
 
   render() {
     const {
-      signup: { error, loading },
+      signup: { error, loading, success },
     } = this.props;
 
     return (
       <div className={styles.formWrap}>
-        <InfoView
-          submitForm={this.submitPayment}
-          error={error}
-          loading={loading}
-        />
+        { !success &&
+          <InfoView
+            submitForm={this.submitPayment}
+            error={error}
+            loading={loading}
+          />
+        }
+        { success &&
+          <Typography
+            type="subheading"
+            color="inherit"
+            className={styles.middleContent}
+            align="center"
+          >
+            We sent you a link to verify your account.
+            <br /> <br /> Please check your email to activate your account.
+          </Typography>
+        }
       </div>
     );
   }
