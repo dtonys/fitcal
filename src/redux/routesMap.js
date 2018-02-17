@@ -6,22 +6,18 @@ import { redirect, NOT_FOUND } from 'redux-first-router';
 export const ROUTE_HOME = 'ROUTE_HOME';
 export const ROUTE_LOGIN = 'ROUTE_LOGIN';
 export const ROUTE_SIGNUP = 'ROUTE_SIGNUP';
-export const ROUTE_REDUX_DEMO = 'ROUTE_REDUX_DEMO';
-export const ROUTE_USERS = 'ROUTE_USERS';
-export const ROUTE_USER_DETAIL = 'ROUTE_USER_DETAIL';
-export const ROUTE_USER_DETAIL_TAB = 'ROUTE_USER_DETAIL_TAB';
-export const ROUTE_ADMIN_USERS = 'ROUTE_ADMIN_USERS';
 export const ROUTE_LOST_PASSWORD = 'ROUTE_LOST_PASSWORD';
 export const ROUTE_RESET_PASSWORD = 'ROUTE_RESET_PASSWORD';
 export const ROUTE_PROFILE = 'ROUTE_PROFILE';
 export const ROUTE_SCHEDULE = 'ROUTE_SCHEDULE';
+export const ROUTE_PLATFORM_SUBSCRIBE = 'ROUTE_PLATFORM_SUBSCRIBE';
+export const ROUTE_USER_SCHEDULE = 'ROUTE_USER_SCHEDULE';
+export const ROUTE_JOIN_EVENT = 'ROUTE_JOIN_EVENT';
+export const ROUTE_MEMBERSHIP_SUBSCRIBE = 'ROUTE_MEMBERSHIP_SUBSCRIBE';
 
 import {
   extractUserState,
 } from 'redux/user/reducer';
-import {
-  LOAD_USERS_REQUESTED,
-} from 'redux/user/actions';
 
 
 const routesMap = {
@@ -36,41 +32,6 @@ const routesMap = {
     path: '/signup',
     loggedOutOnly: true,
   },
-  [ROUTE_REDUX_DEMO]: {
-    path: '/redux-demo',
-  },
-  [ROUTE_USERS]: {
-    path: '/users',
-    loggedInOnly: true,
-    thunk: async (dispatch) => {
-      dispatch({ type: LOAD_USERS_REQUESTED });
-    },
-  },
-  [ROUTE_USER_DETAIL]: {
-    path: '/users/:id',
-    loggedInOnly: true,
-    thunk: async (dispatch, getState) => {
-      if ( !getState().user.users.users ) {
-        dispatch({ type: LOAD_USERS_REQUESTED });
-      }
-    },
-  },
-  [ROUTE_USER_DETAIL_TAB]: {
-    path: '/users/:id/:tab',
-    loggedInOnly: true,
-    thunk: async (dispatch, getState) => {
-      if ( !getState().user.users.users ) {
-        dispatch({ type: LOAD_USERS_REQUESTED });
-      }
-    },
-  },
-  [ROUTE_ADMIN_USERS]: {
-    path: '/admin/users',
-    requireRoles: [ 'admin' ],
-    thunk: async (dispatch) => {
-      dispatch({ type: LOAD_USERS_REQUESTED });
-    },
-  },
   [ROUTE_LOST_PASSWORD]: {
     path: '/lost-password',
   },
@@ -82,6 +43,18 @@ const routesMap = {
   },
   [ROUTE_SCHEDULE]: {
     path: '/schedule',
+  },
+  [ROUTE_PLATFORM_SUBSCRIBE]: {
+    path: '/subscribe',
+  },
+  [ROUTE_USER_SCHEDULE]: {
+    path: '/users/:id/schedule',
+  },
+  [ROUTE_JOIN_EVENT]: {
+    path: '/events/:id/join',
+  },
+  [ROUTE_MEMBERSHIP_SUBSCRIBE]: {
+    path: '/memberships/:id/subscribe',
   },
   [NOT_FOUND]: {
     path: '/not-found',

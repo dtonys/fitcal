@@ -9,15 +9,14 @@ import {
   ROUTE_HOME,
   ROUTE_LOGIN,
   ROUTE_SIGNUP,
-  ROUTE_REDUX_DEMO,
-  ROUTE_USERS,
-  ROUTE_USER_DETAIL,
-  ROUTE_USER_DETAIL_TAB,
-  ROUTE_ADMIN_USERS,
   ROUTE_LOST_PASSWORD,
   ROUTE_RESET_PASSWORD,
   ROUTE_PROFILE,
   ROUTE_SCHEDULE,
+  ROUTE_PLATFORM_SUBSCRIBE,
+  ROUTE_USER_SCHEDULE,
+  ROUTE_JOIN_EVENT,
+  ROUTE_MEMBERSHIP_SUBSCRIBE,
 } from 'redux/routesMap';
 
 
@@ -29,27 +28,28 @@ const HomePage = universal(import('pages/Home/Home'), options);
 const LoginPage = universal(import('pages/Login/Login'), options);
 const SignupPage = universal(import('pages/Signup/Signup'), options);
 const NotFoundPage = universal(import('pages/NotFound/NotFound'), options);
-const ReduxDemoPage = universal(import('pages/ReduxDemo/ReduxDemo'), options);
-const UsersListPage = universal(import('pages/UsersList/UsersList'), options);
-const UserDetailPage = universal(import('pages/UserDetail/UserDetail'), options);
 const LostPasswordPage = universal(import('pages/LostPassword/LostPassword'), options);
 const ResetPasswordPage = universal(import('pages/ResetPassword/ResetPassword'), options);
 const ProfilePage = universal(import('pages/Profile/Profile'), options);
 const SchedulePage = universal(import('pages/Schedule/Schedule'), options);
 
+const PlatformSubscribePage = universal(import('pages/PlatformSubscribe/PlatformSubscribe'), options);
+const UserSchedulePage = universal(import('pages/UserSchedule/UserSchedule'), options);
+const JoinEventPage = universal(import('pages/JoinEvent/JoinEvent'), options);
+const MembershipSubscribePage = universal(import('pages/MembershipSubscribe/MembershipSubscribe'), options);
+
 const actionToPage = {
   [ROUTE_HOME]: HomePage,
   [ROUTE_LOGIN]: LoginPage,
   [ROUTE_SIGNUP]: SignupPage,
-  [ROUTE_REDUX_DEMO]: ReduxDemoPage,
-  [ROUTE_USERS]: UsersListPage,
-  [ROUTE_USER_DETAIL]: UserDetailPage,
-  [ROUTE_USER_DETAIL_TAB]: UserDetailPage,
-  [ROUTE_ADMIN_USERS]: UsersListPage,
   [ROUTE_LOST_PASSWORD]: LostPasswordPage,
   [ROUTE_RESET_PASSWORD]: ResetPasswordPage,
   [ROUTE_PROFILE]: ProfilePage,
   [ROUTE_SCHEDULE]: SchedulePage,
+  [ROUTE_PLATFORM_SUBSCRIBE]: PlatformSubscribePage,
+  [ROUTE_USER_SCHEDULE]: UserSchedulePage,
+  [ROUTE_JOIN_EVENT]: JoinEventPage,
+  [ROUTE_MEMBERSHIP_SUBSCRIBE]: MembershipSubscribePage,
   [NOT_FOUND]: NotFoundPage,
 };
 const getPageFromRoute = ( routeAction ) => {
