@@ -14,6 +14,7 @@ export const ROUTE_PLATFORM_SUBSCRIBE = 'ROUTE_PLATFORM_SUBSCRIBE';
 export const ROUTE_USER_SCHEDULE = 'ROUTE_USER_SCHEDULE';
 export const ROUTE_JOIN_EVENT = 'ROUTE_JOIN_EVENT';
 export const ROUTE_MEMBERSHIP_SUBSCRIBE = 'ROUTE_MEMBERSHIP_SUBSCRIBE';
+export const ROUTE_LOGONAS = 'ROUTE_LOGONAS';
 
 import {
   extractUserState,
@@ -55,6 +56,9 @@ const routesMap = {
   },
   [ROUTE_MEMBERSHIP_SUBSCRIBE]: {
     path: '/memberships/:id/subscribe',
+  },
+  [ROUTE_LOGONAS]: {
+    path: '/logonas',
   },
   [NOT_FOUND]: {
     path: '/not-found',

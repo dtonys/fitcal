@@ -17,6 +17,7 @@ import {
   ROUTE_USER_SCHEDULE,
   ROUTE_JOIN_EVENT,
   ROUTE_MEMBERSHIP_SUBSCRIBE,
+  ROUTE_LOGONAS,
 } from 'redux/routesMap';
 
 
@@ -37,6 +38,7 @@ const PlatformSubscribePage = universal(import('pages/PlatformSubscribe/Platform
 const UserSchedulePage = universal(import('pages/UserSchedule/UserSchedule'), options);
 const JoinEventPage = universal(import('pages/JoinEvent/JoinEvent'), options);
 const MembershipSubscribePage = universal(import('pages/MembershipSubscribe/MembershipSubscribe'), options);
+const LogonAsPage = universal(import('pages/LogonAs/LogonAs'), options);
 
 const actionToPage = {
   [ROUTE_HOME]: HomePage,
@@ -50,6 +52,7 @@ const actionToPage = {
   [ROUTE_USER_SCHEDULE]: UserSchedulePage,
   [ROUTE_JOIN_EVENT]: JoinEventPage,
   [ROUTE_MEMBERSHIP_SUBSCRIBE]: MembershipSubscribePage,
+  [ROUTE_LOGONAS]: LogonAsPage,
   [NOT_FOUND]: NotFoundPage,
 };
 const getPageFromRoute = ( routeAction ) => {

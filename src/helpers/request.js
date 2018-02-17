@@ -28,22 +28,18 @@ const makeRequest = (req) => (url, options = {}) => {
     fetchOptions.headers['cookie'] = req.headers.cookie;
   }
 
-  let responseStatus;
-  let responseOk;
   return fetch(path, fetchOptions)
     .then((response) => {
-      responseOk = response.ok;
-      responseStatus = response.status;
-      return response.json();
-    })
-    .then((body) => {
-      if ( !responseOk ) {
-        return Promise.reject({
-          ...body,
-          status: responseStatus,
+      return response.json()
+        .then(( body ) => {
+          if ( response.ok ) {
+            return body;
+          }
+          return Promise.reject({
+            ...body,
+            status: response.status,
+          });
         });
-      }
-      return body;
     })
     .catch((error) => {
       return Promise.reject(error);
