@@ -15,9 +15,6 @@ import {
   minLength as isMinLength,
   composeValidators,
 } from 'helpers/validators';
-import {
-  showErrorOnSubmit,
-} from 'helpers/form';
 
 import {
   LOGIN_REQUESTED,

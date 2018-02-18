@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-import { Form, Field } from 'react-final-form';
 import {
   dollars as normalizeDollars,
   number as normalizeNumber,
@@ -9,182 +6,15 @@ import {
 import {
   required as isRequired,
 } from 'helpers/validators';
-
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import styles from  'pages/Schedule/Schedule.scss';
+import FormModal from 'components/FormModal/FormModal';
 import TextInput from 'components/TextInput/TextInput';
 import SelectInput from 'components/SelectInput/SelectInput';
-import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  // DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
-// import Typography from 'material-ui/Typography';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-// import moment from 'moment';
+import DateInput from 'components/DateInput/DateInput';
 
-
-class DateTextField extends Component {
-  static propTypes = {
-    value: PropTypes.string,
-    onClick: PropTypes.func,
-    name: PropTypes.string,
-    input: PropTypes.object,
-    meta: PropTypes.object,
-  }
-  static defaultProps = {
-    value: null,
-    onClick: null,
-    name: null,
-    input: null,
-    meta: null,
-  }
-
-  render() {
-    const {
-      value,
-      onClick,
-      name,
-      input,
-      meta,
-    } = this.props;
-    const showError = Boolean(meta.submitFailed && meta.touched && meta.error);
-    // console.log('this.props');
-    // console.log(this.props);
-    return (
-      <TextField
-        onFocus={ onClick }
-        onClick={ onClick }
-        label={name}
-        value={value}
-        type="text"
-        fullWidth
-        error={showError}
-        helperText={showError ? meta.error : '' }
-      />
-    );
-  }
-}
-
-class DateInput extends Component {
-
-  static propTypes = {
-    date: PropTypes.object,
-    input: PropTypes.object.isRequired,
-    meta: PropTypes.object.isRequired,
-    style: PropTypes.object,
-  }
-  static defaultProps = {
-    date: null,
-    style: {},
-  }
-
-  constructor( props ) {
-    super(props);
-    this.state = {
-      date: props.date,
-    };
-  }
-
-  handleChange = (date) => {
-    this.setState({ date });
-    this.props.input.onChange( date );
-  }
-
-  render() {
-    const {
-      input,
-      meta,
-      style,
-    } = this.props;
-    const { date } = this.state;
-
-    return (
-      <div style={style}>
-        <DatePicker
-          name={input.name}
-          customInput={<DateTextField
-            input={input}
-            meta={meta}
-          />}
-          selected={date}
-          onChange={this.handleChange}
-          dateFormat="LLL"
-          showTimeSelect
-
-        />
-      </div>
-    );
-  }
-}
-
-class FormModal extends Component {
-  static propTypes = {
-    open: PropTypes.bool.isRequired,
-    close: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
-    fields: PropTypes.array.isRequired,
-  }
-
-  submitForm = ( values ) => {
-    alert( JSON.stringify(values, null, 4) );
-    // dispatch create event
-    this.props.close();
-  }
-
-  render() {
-    const {
-      open,
-      close,
-      title,
-      fields,
-    } = this.props;
-
-    return (
-      <Dialog
-        open={open}
-        onClose={close}
-      >
-        <Form
-          onSubmit={ this.submitForm }
-        >
-          {({ handleSubmit }) => (
-            <form
-              onSubmit={ handleSubmit }
-              autoComplete="off"
-              data-test="loginForm"
-            >
-              <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-              <DialogContent>
-                { fields.map(( field ) => (
-                  <Field
-                    {...field}
-                    key={field.name}
-                    id={field.name}
-                    label={field.name}
-                  />
-                )) }
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={close} color="primary">
-                  Cancel
-                </Button>
-                <Button type="submit" color="primary">
-                  Submit
-                </Button>
-              </DialogActions>
-            </form>
-          )}
-        </Form>
-      </Dialog>
-    );
-  }
-}
 
 const _6AM_6PM = [ 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5 ];
 const _sun_sat = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
@@ -224,30 +54,32 @@ const commonProps = {
   style: { marginBottom: '10px' },
   validate: isRequired,
 };
-const fields = [
+const textFieldProps = {
+  component: TextInput,
+  type: 'text',
+  ...commonProps,
+};
+const dateFieldProps = {
+  component: DateInput,
+  type: 'text',
+  ...commonProps,
+};
+const eventFields = [
   {
-    component: TextInput,
     name: 'name',
-    type: 'text',
-    ...commonProps,
+    ...textFieldProps,
   },
   {
-    component: TextInput,
     name: 'location',
-    type: 'text',
-    ...commonProps,
+    ...textFieldProps,
   },
   {
-    component: DateInput,
     name: 'start',
-    type: 'text',
-    ...commonProps,
+    ...dateFieldProps,
   },
   {
-    component: DateInput,
     name: 'end',
-    type: 'text',
-    ...commonProps,
+    ...dateFieldProps,
   },
   {
     component: SelectInput,
@@ -269,10 +101,27 @@ const fields = [
     ...commonProps,
   },
   {
-    component: TextInput,
     name: 'capacity',
-    type: 'text',
     parse: normalizeNumber,
+    ...textFieldProps,
+  },
+  {
+    component: SelectInput,
+    name: 'payment',
+    options: [
+      {
+        value: 'Free',
+        label: 'Free',
+      },
+      {
+        value: 'One Time Payment',
+        label: 'One Time Payment',
+      },
+      {
+        value: 'Requires Membership',
+        label: 'Requires Membership',
+      },
+    ],
     ...commonProps,
   },
   {
@@ -346,15 +195,8 @@ class SchedulePage extends Component {
           open={createModalOpen}
           close={this.closeCreateModal}
           title="Create Event"
-          fields={fields}
+          fields={eventFields}
         />
-        <br /> <br />
-        <div> Memberships: </div>
-        <br /><br />
-        <div>
-          <div> My Schedule </div>
-          <Calendar />
-        </div>
       </div>
     );
   }
