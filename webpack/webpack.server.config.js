@@ -76,6 +76,7 @@ const commonConfig = webpackMerge([
       }),
     ],
   },
+  parts.ignoreCSS(),
   parts.loadJavascript({
     include: PATHS.src,
     cacheDirectory: PATHS.webpackCache,

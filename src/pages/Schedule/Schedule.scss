@@ -18,3 +18,16 @@
   height: 50px;
   border-bottom: solid black 1px;
 }
+
+// NOTE: CSS hacks to fix `reactdatepicker`
+:global(.react-datepicker-wrapper) {
+  display: block !important;
+}
+
+:global(.react-datepicker__input-container) {
+  display: block !important;
+}
+
+:global(.react-datepicker__time-list) {
+  padding: 0 !important;
+}

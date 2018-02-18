@@ -108,6 +108,28 @@ exports.serverRenderSCSS = ({ include, exclude, cssModules } = {}) => ({
   },
 });
 
+exports.ignoreCSS = () => ({
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'ignore-loader' ],
+      },
+    ],
+  },
+});
+
+exports.loadCSS = () => ({
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ],
+      },
+    ],
+  },
+});
+
 exports.extractSCSS = ({ include, exclude, cssModules } = {}) => ({
   module: {
     rules: [

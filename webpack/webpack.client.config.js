@@ -47,6 +47,7 @@ const commonConfig = webpackMerge([
   parts.extractSCSS({
     cssModules: true,
   }),
+  parts.loadCSS(),
   parts.loadFonts({
     options: {
       name: '[name].[hash:8].[ext]',
