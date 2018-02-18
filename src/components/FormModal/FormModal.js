@@ -31,6 +31,7 @@ class FormModal extends Component {
       close,
       title,
       fields,
+      showMap,
     } = this.props;
 
     return (
@@ -41,33 +42,48 @@ class FormModal extends Component {
         <Form
           onSubmit={ this.submitForm }
         >
-          {({ handleSubmit }) => (
-            <form
-              onSubmit={ handleSubmit }
-              autoComplete="off"
-              data-test="loginForm"
-            >
-              <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-              <DialogContent>
-                { fields.map(( field ) => (
-                  <Field
-                    {...field}
-                    key={field.name}
-                    id={field.name}
-                    label={field.name}
-                  />
-                )) }
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={close} color="primary">
-                  Cancel
-                </Button>
-                <Button type="submit" color="primary">
-                  Submit
-                </Button>
-              </DialogActions>
-            </form>
-          )}
+          {({ handleSubmit, values }) => {
+            // clear conditional field values
+            Object.keys(showMap).forEach(( conditionalField ) => {
+              if ( values[conditionalField] && !showMap[conditionalField](values) ) {
+                delete values[conditionalField];
+              }
+            });
+            return (
+              <form
+                onSubmit={ handleSubmit }
+                autoComplete="off"
+                data-test="loginForm"
+              >
+                {JSON.stringify(values)}
+                <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+                <DialogContent>
+                  { fields.map(( field ) => {
+                    // handle conditional field render
+                    if ( showMap[field.name] && !showMap[field.name](values) ) {
+                      return null;
+                    }
+                    return (
+                      <Field
+                        {...field}
+                        key={field.name}
+                        id={field.name}
+                        label={field.name}
+                      />
+                    );
+                  }) }
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={close} color="primary">
+                    Cancel
+                  </Button>
+                  <Button type="submit" color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </form>
+            );
+          }}
         </Form>
       </Dialog>
     );

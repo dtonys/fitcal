@@ -9,6 +9,7 @@ import {
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
+import Typography from 'material-ui/Typography';
 import styles from  'pages/Schedule/Schedule.scss';
 import FormModal from 'components/FormModal/FormModal';
 import TextInput from 'components/TextInput/TextInput';
@@ -132,6 +133,9 @@ const eventFields = [
     ...commonProps,
   },
 ];
+const showMap = {
+  price: ( values ) => ( Boolean( values.payment && values.payment !== 'Free' )),
+};
 
 class SchedulePage extends Component {
 
@@ -159,28 +163,9 @@ class SchedulePage extends Component {
 
     return (
       <div>
-        <div> Actions: </div>
-        <br />
-        <Button
-          className={styles.cta__button}
-          raised
-          color="primary"
-          type="submit"
-          data-test="submit"
-          onClick={this.btnClick}
-        >
-          { 'Connect Stripe Account' }
-        </Button>
-        <Button
-          className={styles.cta__button}
-          raised
-          color="primary"
-          type="submit"
-          data-test="submit"
-          onClick={this.btnClick}
-        >
-          { 'Create membership' }
-        </Button>
+        <Typography type="title" color="primary" gutterBottom >
+          {'Actions'}
+        </Typography>
         <Button
           className={styles.cta__button}
           raised
@@ -196,7 +181,16 @@ class SchedulePage extends Component {
           close={this.closeCreateModal}
           title="Create Event"
           fields={eventFields}
+          showMap={showMap}
         />
+        <br /><br />
+        <Typography type="title" color="primary" gutterBottom >
+          {'My Events'}
+        </Typography>
+        <br /><br />
+        <Typography type="title" color="primary" gutterBottom >
+          {'Joined Events'}
+        </Typography>
       </div>
     );
   }

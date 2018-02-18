@@ -9,42 +9,45 @@ import {
 } from 'helpers/form';
 
 
-const DateTextField = ({
-  value,
-  onClick,
-  name,
-  // input,
-  meta,
-}) => {
-  const showError = showErrorOnSubmit(meta);
-  return (
-    <TextField
-      onFocus={ onClick }
-      onClick={ onClick }
-      label={name}
-      value={value}
-      type="text"
-      fullWidth
-      error={showError}
-      helperText={showError ? meta.error : '' }
-    />
-  );
-};
-DateTextField.propTypes = {
-  value: PropTypes.string,
-  onClick: PropTypes.func,
-  name: PropTypes.string,
-  input: PropTypes.object,
-  meta: PropTypes.object,
-};
-DateTextField.defaultProps = {
-  value: null,
-  onClick: null,
-  name: null,
-  input: null,
-  meta: null,
-};
+class DateTextField extends Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    value: PropTypes.string,
+    onClick: PropTypes.func,
+    name: PropTypes.string,
+    input: PropTypes.object,
+    meta: PropTypes.object,
+  }
+  static defaultProps = {
+    value: null,
+    onClick: null,
+    name: null,
+    input: null,
+    meta: null,
+  }
 
+  render() {
+    const {
+      value,
+      onClick,
+      name,
+      // input,
+      meta,
+    } = this.props;
+    const showError = showErrorOnSubmit(meta);
+    return (
+      <TextField
+        onFocus={ onClick }
+        onClick={ onClick }
+        label={name}
+        value={value}
+        type="text"
+        fullWidth
+        error={showError}
+        helperText={showError ? meta.error : '' }
+      />
+    );
+  }
+}
 
 class DateInput extends Component {
 
