@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
 import { Form, Field } from 'react-final-form';
+import {
+  dollars as normalizeDollars,
+  number as normalizeNumber,
+} from 'helpers/normalizers';
+import {
+  required as isRequired,
+} from 'helpers/validators';
 
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import styles from  'pages/Schedule/Schedule.scss';
 import TextInput from 'components/TextInput/TextInput';
+import SelectInput from 'components/SelectInput/SelectInput';
 import TextField from 'material-ui/TextField';
 import Dialog, {
   DialogActions,
@@ -26,11 +34,15 @@ class DateTextField extends Component {
     value: PropTypes.string,
     onClick: PropTypes.func,
     name: PropTypes.string,
+    input: PropTypes.object,
+    meta: PropTypes.object,
   }
   static defaultProps = {
     value: null,
     onClick: null,
     name: null,
+    input: null,
+    meta: null,
   }
 
   render() {
@@ -38,7 +50,12 @@ class DateTextField extends Component {
       value,
       onClick,
       name,
+      input,
+      meta,
     } = this.props;
+    const showError = Boolean(meta.submitFailed && meta.touched && meta.error);
+    // console.log('this.props');
+    // console.log(this.props);
     return (
       <TextField
         onFocus={ onClick }
@@ -47,6 +64,8 @@ class DateTextField extends Component {
         value={value}
         type="text"
         fullWidth
+        error={showError}
+        helperText={showError ? meta.error : '' }
       />
     );
   }
@@ -80,6 +99,7 @@ class DateInput extends Component {
   render() {
     const {
       input,
+      meta,
       style,
     } = this.props;
     const { date } = this.state;
@@ -88,11 +108,15 @@ class DateInput extends Component {
       <div style={style}>
         <DatePicker
           name={input.name}
-          customInput={<DateTextField />}
+          customInput={<DateTextField
+            input={input}
+            meta={meta}
+          />}
           selected={date}
           onChange={this.handleChange}
           dateFormat="LLL"
           showTimeSelect
+
         />
       </div>
     );
@@ -198,6 +222,7 @@ const commonProps = {
   margin: 'dense',
   fullWidth: true,
   style: { marginBottom: '10px' },
+  validate: isRequired,
 };
 const fields = [
   {
@@ -225,21 +250,36 @@ const fields = [
     ...commonProps,
   },
   {
-    component: TextInput,
+    component: SelectInput,
     name: 'repeats',
-    type: 'text',
+    options: [
+      {
+        value: 'Does not repeat',
+        label: 'Does not repeat',
+      },
+      {
+        value: 'Daily',
+        label: 'Daily',
+      },
+      {
+        value: 'Weekly',
+        label: 'Weekly',
+      },
+    ],
     ...commonProps,
   },
   {
     component: TextInput,
     name: 'capacity',
     type: 'text',
+    parse: normalizeNumber,
     ...commonProps,
   },
   {
     component: TextInput,
     name: 'price',
     type: 'text',
+    parse: normalizeDollars,
     ...commonProps,
   },
 ];

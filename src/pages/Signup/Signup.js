@@ -15,6 +15,10 @@ import {
   composeValidators,
 } from 'helpers/validators';
 import {
+  showErrorOnBlur,
+  showErrorOnSubmit,
+} from 'helpers/form';
+import {
   SIGNUP_REQUESTED,
 } from 'redux/user/actions';
 import {
@@ -103,6 +107,7 @@ const InfoView = ({
           label="username"
           type="text"
           margin="normal"
+          showError={showErrorOnBlur}
         />
         <Field
           name="phone"
@@ -121,6 +126,7 @@ const InfoView = ({
           label="email"
           type="text"
           margin="normal"
+          showError={showErrorOnBlur}
         />
         <Field
           name="password"
