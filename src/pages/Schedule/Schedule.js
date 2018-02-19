@@ -22,6 +22,7 @@ import DateInput from 'components/DateInput/DateInput';
 import Divider from 'material-ui/Divider';
 import {
   CREATE_EVENT_REQUESTED,
+  DELETE_EVENT_REQUESTED,
   LOAD_EVENT_LIST_REQUESTED,
 } from 'redux/event/actions';
 import {
@@ -63,6 +64,8 @@ const Calendar = () => (
 
 const EventListView = ({
   eventList,
+  onEditClick,
+  onDeleteClick,
 }) => {
   return (
     <List>
@@ -79,11 +82,15 @@ const EventListView = ({
               raised
               color="primary"
               style={{ marginRight: '10px' }}
+              data-resource-id={event._id}
+              onClick={onEditClick}
             >Edit
             </Button>
             <Button
               raised
               color="primary"
+              data-resource-id={event._id}
+              onClick={onDeleteClick}
             >Delete
             </Button>
           </ListItem>
@@ -95,6 +102,8 @@ const EventListView = ({
 };
 EventListView.propTypes = {
   eventList: PropTypes.array.isRequired,
+  onEditClick: PropTypes.func.isRequired,
+  onDeleteClick: PropTypes.func.isRequired,
 };
 const EventList = compose(
   connect(
@@ -240,6 +249,19 @@ class SchedulePage extends Component {
     this.props.dispatch({ type: LOAD_EVENT_LIST_REQUESTED });
   }
 
+  onEditClick = ( event ) => {
+    const id = event.currentTarget.getAttribute('data-resource-id');
+    alert('onEditClick ' + id);
+  }
+
+  onDeleteClick = ( event ) => {
+    const id = event.currentTarget.getAttribute('data-resource-id');
+    const result = confirm('Are you sure you want to delete this item?'); // eslint-disable-line no-alert
+    if ( result ) {
+      this.props.dispatch({ type: DELETE_EVENT_REQUESTED, payload: id });
+    }
+  }
+
   openCreateModal = () => {
     this.setState({
       modalOpen: true,
@@ -284,7 +306,10 @@ class SchedulePage extends Component {
         <Typography type="title" color="primary" gutterBottom >
           {'My Events'}
         </Typography>
-        <EventList />
+        <EventList
+          onEditClick={this.onEditClick}
+          onDeleteClick={this.onDeleteClick}
+        />
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'Joined Events'}

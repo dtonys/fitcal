@@ -1,3 +1,4 @@
+import lodashFind from 'lodash/find';
 import {
   CREATE_EVENT_STARTED, CREATE_EVENT_SUCCESS, CREATE_EVENT_ERROR,
   UPDATE_EVENT_STARTED, UPDATE_EVENT_SUCCESS, UPDATE_EVENT_ERROR,
@@ -63,6 +64,10 @@ export function extractState( globalState ) {
 }
 export function extractListState( globalState ) {
   return globalState[STORE_KEY][LIST_KEY];
+}
+export function extractListEventById( globalState, id ) {
+  const eventList = extractListState(globalState);
+  return lodashFind(eventList.items, { _id: id }, null);
 }
 
 const apiInitialState = {
