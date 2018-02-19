@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import {
   dollars as normalizeDollars,
   number as normalizeNumber,
@@ -10,11 +13,20 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import Typography from 'material-ui/Typography';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 import styles from  'pages/Schedule/Schedule.scss';
 import FormModal from 'components/FormModal/FormModal';
 import TextInput from 'components/TextInput/TextInput';
 import SelectInput from 'components/SelectInput/SelectInput';
 import DateInput from 'components/DateInput/DateInput';
+import Divider from 'material-ui/Divider';
+import {
+  CREATE_EVENT_REQUESTED,
+  LOAD_EVENT_LIST_REQUESTED,
+} from 'redux/event/actions';
+import {
+  extractListState,
+} from 'redux/event/reducer';
 
 
 const _6AM_6PM = [ 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5 ];
@@ -48,6 +60,49 @@ const Calendar = () => (
     </Grid>
   </div>
 );
+
+const EventListView = ({
+  eventList,
+}) => {
+  return (
+    <List>
+      {eventList.map((event) => (
+        <div key={event._id} >
+          <ListItem
+            dense
+          >
+            <ListItemText
+              primary={event.name}
+              secondary={event.start_date.toString()}
+            />
+            <Button
+              raised
+              color="primary"
+              style={{ marginRight: '10px' }}
+            >Edit
+            </Button>
+            <Button
+              raised
+              color="primary"
+            >Delete
+            </Button>
+          </ListItem>
+          <Divider />
+        </div>
+      ))}
+    </List>
+  );
+};
+EventListView.propTypes = {
+  eventList: PropTypes.array.isRequired,
+};
+const EventList = compose(
+  connect(
+    ( globalState ) => ({
+      eventList: extractListState(globalState).items,
+    })
+  )
+)(EventListView);
 
 export const NOT_RECURRING = 'NOT_RECURRING';
 export const RECURRING_DAILY = 'RECURRING_DAILY';
@@ -131,39 +186,74 @@ const eventFields = [
   },
   {
     component: TextInput,
-    name: 'price',
+    name: 'price_dollars',
+    label: 'price',
     type: 'text',
-    parse: normalizeDollars,
+    parse: normalizeNumber,
+    format: normalizeDollars,
     ...commonProps,
   },
 ];
+// Conditionally show these fields
 const showMap = {
-  price: ( values ) => ( Boolean( values.payment && values.payment !== 'Free' )),
+  price_dollars: ( values ) => ( Boolean( values.payment && values.payment !== 'Free' )),
+};
+const convertValuesToApiFormat = ( values ) => {
+  const apiValues = {
+    ...values,
+  };
+
+  // convert dollars to cents
+  [
+    [ 'price_dollars', 'price_cents' ],
+  ].forEach(( pair ) => {
+    const [ dollarsKey, centsKey ] = pair;
+    apiValues[centsKey] = ( values[dollarsKey]
+      ? values[dollarsKey] + '00'
+      : '0'
+    );
+    delete apiValues[dollarsKey];
+  });
+
+  // convert moment obj to ISO date string
+  [ 'start', 'end' ].forEach(( dateField ) => {
+    apiValues[dateField] = values[dateField].toISOString();
+  });
+  return apiValues;
 };
 
+@connect()
 class SchedulePage extends Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+  }
 
   constructor( props ) {
     super(props);
     this.state = {
-      createModalOpen: false,
+      modalOpen: false,
     };
+  }
+
+  // NOTE: Load on server for real use case
+  componentDidMount() {
+    this.props.dispatch({ type: LOAD_EVENT_LIST_REQUESTED });
   }
 
   openCreateModal = () => {
     this.setState({
-      createModalOpen: true,
+      modalOpen: true,
     });
   }
 
-  closeCreateModal = () => {
+  closeModal = () => {
     this.setState({
-      createModalOpen: false,
+      modalOpen: false,
     });
   }
 
   render() {
-    const { createModalOpen } = this.state;
+    const { modalOpen } = this.state;
 
     return (
       <div>
@@ -181,16 +271,20 @@ class SchedulePage extends Component {
           { 'Create event' }
         </Button>
         <FormModal
-          open={createModalOpen}
-          close={this.closeCreateModal}
+          open={modalOpen}
+          close={this.closeModal}
+          submitActionType={CREATE_EVENT_REQUESTED}
           title="Create Event"
           fields={eventFields}
           showMap={showMap}
+          convertValuesToApiFormat={convertValuesToApiFormat}
         />
+
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'My Events'}
         </Typography>
+        <EventList />
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'Joined Events'}

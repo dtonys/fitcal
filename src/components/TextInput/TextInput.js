@@ -18,7 +18,7 @@ const TextInput = ({
       { ...input }
       { ...rest }
       onChange={(event) => input.onChange(event.target.value)}
-      value={input.value}
+      value={input.value || ''}
       error={errorVisible}
       helperText={errorVisible ? meta.error : ( rest.helperText || '' )}
     />

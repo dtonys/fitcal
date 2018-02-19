@@ -16,10 +16,10 @@ import {
 } from 'redux/routesMap';
 
 
-function* loadUser(action, context) {
+function* loadUser(action, { request }) {
   yield put({ type: LOAD_USER_STARTED });
   try {
-    const userData = yield call(context.request, '/api/session');
+    const userData = yield call(request, '/api/session');
     const userPayload = lodashGet(userData, 'data.currentUser', null);
     yield put({ type: LOAD_USER_SUCCESS, payload: userPayload });
   }
@@ -30,21 +30,21 @@ function* loadUser(action, context) {
   }
 }
 
-function* logout(action, context) {
-  yield call(context.request, '/api/logout');
+function* logout(action, { request }) {
+  yield call(request, '/api/logout');
   yield put({ type: LOGOUT_SUCCESS });
   yield put( redirect({ type: ROUTE_HOME }) );
 }
 
-function* login(action, context) {
+function* login(action, { request }) {
   yield put({ type: LOGIN_STARTED });
   try {
-    yield call( context.request, '/api/login', {
+    yield call( request, '/api/login', {
       method: 'POST',
       body: action.payload,
     });
     yield put({ type: LOGIN_SUCCESS });
-    yield* loadUser(null, context);
+    yield* loadUser(null, { request });
     const globalState = yield select();
     const nextAction = lodashGet(globalState, 'location.query.next');
     const nextActionParsed = nextAction ? JSON.parse(nextAction) : { type: ROUTE_SCHEDULE };
@@ -57,10 +57,10 @@ function* login(action, context) {
   }
 }
 
-function* signup(action, context) {
+function* signup(action, { request }) {
   yield put({ type: SIGNUP_STARTED });
   try {
-    yield call( context.request, '/api/signup', {
+    yield call( request, '/api/signup', {
       method: 'POST',
       body: action.payload,
     });
@@ -73,10 +73,10 @@ function* signup(action, context) {
   }
 }
 
-function* loadUsers(action, context) {
+function* loadUsers(action, { request }) {
   yield put({ type: LOAD_USERS_STARTED });
   try {
-    const users = yield call( context.request, '/api/users');
+    const users = yield call( request, '/api/users');
     const userList = lodashGet( users, 'data.items' );
     yield put({ type: LOAD_USERS_SUCCESS, payload: userList });
   }

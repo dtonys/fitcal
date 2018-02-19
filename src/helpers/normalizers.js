@@ -1,5 +1,5 @@
 /**
- * `9,999,999`
+ * 9999999 -> `9,999,999`
  */
 export function commify( value ) {
   if (!value) {
@@ -18,7 +18,7 @@ export function number( value ) {
 }
 
 /**
- * `$9,999,999`
+ * 9999999 -> `$9,999,999`
  */
 export function dollars( value ) {
   if ( typeof value === 'number' ) {
@@ -35,6 +35,23 @@ export function dollars( value ) {
   if ( result ) {
     result = '$' + result;
   }
+  return result;
+}
+
+/**
+ * 9999999 -> 999999900
+ */
+export function dollarsToCents( value ) {
+  let result = value;
+  result = number( result );
+  result += '0';
+  return result;
+}
+
+export function centsToDollars( value ) {
+  let result = value;
+  result = number( result );
+  result += '0';
   return result;
 }
 

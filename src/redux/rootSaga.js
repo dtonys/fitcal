@@ -5,6 +5,7 @@ import {
 import demoSaga from 'redux/demo/saga';
 import userSaga from 'redux/user/saga';
 import lostPasswordSaga from 'redux/lost-password/saga';
+import eventSaga from 'redux/event/saga';
 
 
 export default function* rootSaga(context) {
@@ -12,5 +13,6 @@ export default function* rootSaga(context) {
     fork(demoSaga, context),
     fork(userSaga, context),
     fork(lostPasswordSaga, context),
+    fork(eventSaga, context),
   ]);
 }
