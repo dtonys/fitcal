@@ -65,7 +65,7 @@ class DateInput extends Component {
   constructor( props ) {
     super(props);
     this.state = {
-      date: props.date,
+      date: props.input.value || null,
     };
   }
 

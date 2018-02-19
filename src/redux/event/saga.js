@@ -14,7 +14,7 @@ import {
 function* loadList( action, { request } ) {
   yield put({ type: LOAD_EVENT_LIST_STARTED });
   try {
-    const response = yield call( request, '/api/events' );
+    const response = yield call( request, action.meta.apiUrl );
     yield put({ type: LOAD_EVENT_LIST_SUCCESS, payload: response.data.items });
   }
   catch ( httpError ) {

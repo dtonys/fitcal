@@ -49,7 +49,7 @@ const routesMap = {
     path: '/subscribe',
   },
   [ROUTE_USER_SCHEDULE]: {
-    path: '/users/:id/schedule',
+    path: '/users/:id',
   },
   [ROUTE_JOIN_EVENT]: {
     path: '/events/:id/join',

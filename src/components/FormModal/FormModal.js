@@ -20,13 +20,15 @@ class FormModal extends Component {
     title: PropTypes.string.isRequired,
     fields: PropTypes.array.isRequired,
     submitActionType: PropTypes.string.isRequired,
-    convertValuesToApiFormat: PropTypes.func,
+    convertFormValuesToApiFormat: PropTypes.func,
     showMap: PropTypes.object,
+    initialValues: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
   }
   static defaultProps = {
-    convertValuesToApiFormat: null,
+    convertFormValuesToApiFormat: null,
     showMap: {},
+    initialValues: null,
   }
 
   submitForm = ( values ) => {
@@ -34,11 +36,11 @@ class FormModal extends Component {
       dispatch,
       close,
       submitActionType,
-      convertValuesToApiFormat,
+      convertFormValuesToApiFormat,
     } = this.props;
     let apiValues = values;
-    if ( convertValuesToApiFormat ) {
-      apiValues = convertValuesToApiFormat(values);
+    if ( convertFormValuesToApiFormat ) {
+      apiValues = convertFormValuesToApiFormat(values);
     }
     dispatch({ type: submitActionType, payload: apiValues });
     close();
@@ -51,6 +53,7 @@ class FormModal extends Component {
       title,
       fields,
       showMap,
+      initialValues,
     } = this.props;
 
     return (
@@ -60,6 +63,7 @@ class FormModal extends Component {
       >
         <Form
           onSubmit={ this.submitForm }
+          initialValues={initialValues}
         >
           {({ handleSubmit, values }) => {
             // clear conditional field values

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import lodashFind from 'lodash/find';
+import moment from 'moment';
 import {
   dollars as normalizeDollars,
   number as normalizeNumber,
@@ -13,16 +14,16 @@ import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import Typography from 'material-ui/Typography';
-import List, { ListItem, ListItemText } from 'material-ui/List';
 import styles from  'pages/Schedule/Schedule.scss';
 import FormModal from 'components/FormModal/FormModal';
 import TextInput from 'components/TextInput/TextInput';
 import SelectInput from 'components/SelectInput/SelectInput';
 import DateInput from 'components/DateInput/DateInput';
-import Divider from 'material-ui/Divider';
+import EventList from 'components/EventList/EventList';
 import {
   CREATE_EVENT_REQUESTED,
   DELETE_EVENT_REQUESTED,
+  UPDATE_EVENT_REQUESTED,
   LOAD_EVENT_LIST_REQUESTED,
 } from 'redux/event/actions';
 import {
@@ -61,57 +62,6 @@ const Calendar = () => (
     </Grid>
   </div>
 );
-
-const EventListView = ({
-  eventList,
-  onEditClick,
-  onDeleteClick,
-}) => {
-  return (
-    <List>
-      {eventList.map((event) => (
-        <div key={event._id} >
-          <ListItem
-            dense
-          >
-            <ListItemText
-              primary={event.name}
-              secondary={event.start_date.toString()}
-            />
-            <Button
-              raised
-              color="primary"
-              style={{ marginRight: '10px' }}
-              data-resource-id={event._id}
-              onClick={onEditClick}
-            >Edit
-            </Button>
-            <Button
-              raised
-              color="primary"
-              data-resource-id={event._id}
-              onClick={onDeleteClick}
-            >Delete
-            </Button>
-          </ListItem>
-          <Divider />
-        </div>
-      ))}
-    </List>
-  );
-};
-EventListView.propTypes = {
-  eventList: PropTypes.array.isRequired,
-  onEditClick: PropTypes.func.isRequired,
-  onDeleteClick: PropTypes.func.isRequired,
-};
-const EventList = compose(
-  connect(
-    ( globalState ) => ({
-      eventList: extractListState(globalState).items,
-    })
-  )
-)(EventListView);
 
 export const NOT_RECURRING = 'NOT_RECURRING';
 export const RECURRING_DAILY = 'RECURRING_DAILY';
@@ -186,10 +136,6 @@ const eventFields = [
         value: 'One Time Payment',
         label: 'One Time Payment',
       },
-      {
-        value: 'Requires Membership',
-        label: 'Requires Membership',
-      },
     ],
     ...commonProps,
   },
@@ -207,7 +153,7 @@ const eventFields = [
 const showMap = {
   price_dollars: ( values ) => ( Boolean( values.payment && values.payment !== 'Free' )),
 };
-const convertValuesToApiFormat = ( values ) => {
+const convertFormValuesToApiFormat = ( values ) => {
   const apiValues = {
     ...values,
   };
@@ -224,16 +170,40 @@ const convertValuesToApiFormat = ( values ) => {
     delete apiValues[dollarsKey];
   });
 
-  // convert moment obj to ISO date string
+  // serialize date to ISO format, for the API
   [ 'start', 'end' ].forEach(( dateField ) => {
     apiValues[dateField] = values[dateField].toISOString();
   });
   return apiValues;
 };
+const convertApiValuesToFormFormat = ( eventItem ) => {
+  const formValues = {
+    name: eventItem.name,
+    location: eventItem.location,
+    start: moment(eventItem.start_date),
+    end: moment(eventItem.end_date),
+    repeats: eventItem.recurring_type,
+    capacity: eventItem.max_clients.toString(),
+  };
+  if ( eventItem.price_cents === 0 ) {
+    formValues.payment = 'Free';
+    formValues.price_dollars = '0';
+  }
+  if ( eventItem.price_cents >= 100 ) {
+    formValues.payment = 'One Time Payment';
+    formValues.price_dollars = (eventItem.price_cents / 100).toString();
+  }
+  return formValues;
+};
 
-@connect()
+@connect(
+  ( globalState ) => ({
+    eventList: extractListState(globalState).items,
+  })
+)
 class SchedulePage extends Component {
   static propTypes = {
+    eventList: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
   }
 
@@ -241,20 +211,36 @@ class SchedulePage extends Component {
     super(props);
     this.state = {
       modalOpen: false,
+      modalActionType: CREATE_EVENT_REQUESTED,
+      modalTitle: 'Create Event',
+      initialValues: null,
     };
   }
 
   // NOTE: Load on server for real use case
   componentDidMount() {
-    this.props.dispatch({ type: LOAD_EVENT_LIST_REQUESTED });
+    this.props.dispatch({
+      type: LOAD_EVENT_LIST_REQUESTED,
+      meta: { apiUrl: '/api/events' },
+    });
   }
 
-  onEditClick = ( event ) => {
+  openEditModal = ( event ) => {
     const id = event.currentTarget.getAttribute('data-resource-id');
-    alert('onEditClick ' + id);
+    const eventItem = lodashFind(this.props.eventList, { _id: id }, null);
+
+    const initialFormValues = convertApiValuesToFormFormat(eventItem);
+    initialFormValues.id = id;
+
+    this.setState({
+      modalOpen: true,
+      modalActionType: UPDATE_EVENT_REQUESTED,
+      modalTitle: 'Edit Event',
+      initialValues: initialFormValues,
+    });
   }
 
-  onDeleteClick = ( event ) => {
+  confirmDelete = ( event ) => {
     const id = event.currentTarget.getAttribute('data-resource-id');
     const result = confirm('Are you sure you want to delete this item?'); // eslint-disable-line no-alert
     if ( result ) {
@@ -265,6 +251,9 @@ class SchedulePage extends Component {
   openCreateModal = () => {
     this.setState({
       modalOpen: true,
+      modalActionType: CREATE_EVENT_REQUESTED,
+      modalTitle: 'Create Event',
+      initialValues: null,
     });
   }
 
@@ -275,7 +264,16 @@ class SchedulePage extends Component {
   }
 
   render() {
-    const { modalOpen } = this.state;
+    const {
+      eventList,
+    } = this.props;
+
+    const {
+      modalOpen,
+      modalActionType,
+      modalTitle,
+      initialValues,
+    } = this.state;
 
     return (
       <div>
@@ -295,20 +293,21 @@ class SchedulePage extends Component {
         <FormModal
           open={modalOpen}
           close={this.closeModal}
-          submitActionType={CREATE_EVENT_REQUESTED}
-          title="Create Event"
+          submitActionType={modalActionType}
+          title={modalTitle}
           fields={eventFields}
           showMap={showMap}
-          convertValuesToApiFormat={convertValuesToApiFormat}
+          convertFormValuesToApiFormat={convertFormValuesToApiFormat}
+          initialValues={initialValues}
         />
-
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'My Events'}
         </Typography>
         <EventList
-          onEditClick={this.onEditClick}
-          onDeleteClick={this.onDeleteClick}
+          onEditClick={this.openEditModal}
+          onDeleteClick={this.confirmDelete}
+          eventList={eventList}
         />
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
