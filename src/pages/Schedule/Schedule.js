@@ -49,6 +49,10 @@ const Calendar = () => (
   </div>
 );
 
+export const NOT_RECURRING = 'NOT_RECURRING';
+export const RECURRING_DAILY = 'RECURRING_DAILY';
+export const RECURRING_WEEKLY = 'RECURRING_WEEKLY';
+
 const commonProps = {
   margin: 'dense',
   fullWidth: true,
@@ -87,15 +91,15 @@ const eventFields = [
     name: 'repeats',
     options: [
       {
-        value: 'Does not repeat',
+        value: NOT_RECURRING,
         label: 'Does not repeat',
       },
       {
-        value: 'Daily',
+        value: RECURRING_DAILY,
         label: 'Daily',
       },
       {
-        value: 'Weekly',
+        value: RECURRING_WEEKLY,
         label: 'Weekly',
       },
     ],

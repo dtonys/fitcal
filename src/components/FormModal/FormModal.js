@@ -55,7 +55,6 @@ class FormModal extends Component {
                 autoComplete="off"
                 data-test="loginForm"
               >
-                {JSON.stringify(values)}
                 <DialogTitle id="form-dialog-title">{title}</DialogTitle>
                 <DialogContent>
                   { fields.map(( field ) => {

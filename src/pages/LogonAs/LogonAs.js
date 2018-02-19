@@ -9,6 +9,7 @@ import styles from 'pages/LogonAs/LogonAs.scss';
 import TextInput from 'components/TextInput/TextInput';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
+import { clientRequest } from 'helpers/request';
 
 import {
   ROUTE_SCHEDULE,
@@ -40,26 +41,12 @@ class LogonAsPage extends Component {
     this.setState({
       loading: true,
     });
-    fetch('/api/logonas', {
+    clientRequest('/api/logonas', {
       method: 'POST',
-      body: JSON.stringify(values),
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: values,
     })
-      .then(( response ) => {
-        return response.json()
-          .then(( body ) => {
-            if ( response.ok ) {
-              window.location.href = '/schedule';
-              return;
-            }
-            return Promise.reject({
-              ...body,
-              status: response.status,
-            });
-          });
+      .then(() => {
+        window.location.href = '/schedule';
       })
       .catch(( error ) => {
         const message = lodashGet( error, 'error.message' );
