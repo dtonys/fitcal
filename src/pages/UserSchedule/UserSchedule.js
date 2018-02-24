@@ -5,26 +5,26 @@ import { connect } from 'react-redux';
 import Typography from 'material-ui/Typography';
 import EventList from 'components/EventList/EventList';
 import {
-  LOAD_EVENT_LIST_REQUESTED,
+  LOAD_USER_EVENTS_REQUESTED,
 } from 'redux/event/actions';
 import {
   ROUTE_JOIN_EVENT,
 } from 'redux/routesMap';
 import {
-  extractListState,
+  extractUserEventsState,
 } from 'redux/event/reducer';
 
 
 @connect(
   ( globalState ) => ({
-    eventList: extractListState(globalState).items,
+    userEvents: extractUserEventsState(globalState).items,
     username: globalState.location.payload.id,
   })
 )
 class UserSchedulePage extends Component {
 
   static propTypes = {
-    eventList: PropTypes.array.isRequired,
+    userEvents: PropTypes.array.isRequired,
     username: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
   }
@@ -33,8 +33,8 @@ class UserSchedulePage extends Component {
   componentDidMount() {
     const { username } = this.props;
     this.props.dispatch({
-      type: LOAD_EVENT_LIST_REQUESTED,
-      meta: { apiUrl: `/api/${username}/events` },
+      type: LOAD_USER_EVENTS_REQUESTED,
+      payload: username,
     });
   }
 
@@ -45,7 +45,7 @@ class UserSchedulePage extends Component {
 
   render() {
     const {
-      eventList,
+      userEvents,
       username,
     } = this.props;
 
@@ -56,7 +56,7 @@ class UserSchedulePage extends Component {
         </Typography>
         <EventList
           onJoinClick={this.joinEventRedirect}
-          eventList={eventList}
+          eventList={userEvents}
         />
       </div>
     );

@@ -25,6 +25,7 @@ class JoinEventPage extends Component {
 
   // NOTE: Server render
   componentDidMount() {
+
     this.props.dispatch({
       type: LOAD_EVENT_DETAIL_REQUESTED,
       payload: this.props.eventId,
@@ -45,7 +46,7 @@ class JoinEventPage extends Component {
 
     return (
       <div>
-        <pre> {JSON.stringify(eventDetailState.item, null, 4)} </pre>
+        <pre> {JSON.stringify(eventDetailState.data, null, 4)} </pre>
         <br /><br /><br />
         <Button
           raised

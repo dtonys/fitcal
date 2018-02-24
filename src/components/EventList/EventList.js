@@ -12,7 +12,6 @@ const EventList = ({
   onDeleteClick,
   onJoinClick,
 }) => {
-  const canJoin = true;
   return (
     <List>
       {eventList.map((event) => (
@@ -24,7 +23,7 @@ const EventList = ({
               primary={event.name}
               secondary={event.start_date.toString()}
             />
-            {onEditClick &&
+            { onEditClick &&
               <Button
                 raised
                 color="primary"
@@ -48,8 +47,8 @@ const EventList = ({
                 raised
                 color="primary"
                 data-resource-id={event._id}
-                disabled={!event.current_user.can_join}
-                onClick={event.current_user.can_join ? onJoinClick : null}
+                disabled={!event.can_join}
+                onClick={event.can_join ? onJoinClick : null}
               >Join
               </Button>
             }

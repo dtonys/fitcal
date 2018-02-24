@@ -24,10 +24,12 @@ import {
   CREATE_EVENT_REQUESTED,
   DELETE_EVENT_REQUESTED,
   UPDATE_EVENT_REQUESTED,
-  LOAD_EVENT_LIST_REQUESTED,
+  LOAD_CREATED_EVENTS_REQUESTED,
+  LOAD_JOINED_EVENTS_REQUESTED,
 } from 'redux/event/actions';
 import {
-  extractListState,
+  extractCreatedEventsState,
+  extractJoinedEventsState,
 } from 'redux/event/reducer';
 
 
@@ -198,12 +200,14 @@ const convertApiValuesToFormFormat = ( eventItem ) => {
 
 @connect(
   ( globalState ) => ({
-    eventList: extractListState(globalState).items,
+    createdEvents: extractCreatedEventsState(globalState).items,
+    joinedEvents: extractJoinedEventsState(globalState).items,
   })
 )
 class SchedulePage extends Component {
   static propTypes = {
-    eventList: PropTypes.array.isRequired,
+    createdEvents: PropTypes.array.isRequired,
+    joinedEvents: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
   }
 
@@ -219,15 +223,13 @@ class SchedulePage extends Component {
 
   // NOTE: Load on server for real use case
   componentDidMount() {
-    this.props.dispatch({
-      type: LOAD_EVENT_LIST_REQUESTED,
-      meta: { apiUrl: '/api/events' },
-    });
+    this.props.dispatch({ type: LOAD_CREATED_EVENTS_REQUESTED });
+    this.props.dispatch({ type: LOAD_JOINED_EVENTS_REQUESTED });
   }
 
   openEditModal = ( event ) => {
     const id = event.currentTarget.getAttribute('data-resource-id');
-    const eventItem = lodashFind(this.props.eventList, { _id: id }, null);
+    const eventItem = lodashFind(this.props.createdEvents, { _id: id }, null);
 
     const initialFormValues = convertApiValuesToFormFormat(eventItem);
     initialFormValues.id = id;
@@ -265,7 +267,8 @@ class SchedulePage extends Component {
 
   render() {
     const {
-      eventList,
+      createdEvents,
+      joinedEvents,
     } = this.props;
 
     const {
@@ -307,12 +310,15 @@ class SchedulePage extends Component {
         <EventList
           onEditClick={this.openEditModal}
           onDeleteClick={this.confirmDelete}
-          eventList={eventList}
+          eventList={createdEvents}
         />
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'Joined Events'}
         </Typography>
+        <EventList
+          eventList={joinedEvents}
+        />
       </div>
     );
   }
