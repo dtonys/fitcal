@@ -5,10 +5,11 @@ import querystring from 'querystring';
 function getPath( req, url, query ) {
   const queryString = query ? ('?' + querystring.stringify(query)) : '';
   // NOTE: Use full url if it starts with http
-  if ( /http/.test(url) ) {
+  if ( /^(http|https)/.test(url) ) {
     return url + queryString;
   }
-  const basePath = req ? (`${req.protocol}://${req.get('host')}`) : '';
+  // NOTE: All content is served behind https, hence use https as origin
+  const basePath = req ? (`https://${req.get('host')}`) : '';
   return basePath + url + queryString;
 }
 
@@ -58,8 +59,14 @@ const makeRequest = (req) => (url, options = {}) => {
   if ( options.body && typeof options.body === 'object' ) {
     fetchOptions.body = JSON.stringify(options.body);
   }
-  if ( req && lodashGet(req, 'headers.cookie') ) {
-    fetchOptions.headers['cookie'] = req.headers.cookie;
+  // Pass some headers for server side requests
+  if ( req ) {
+    if ( lodashGet(req, 'headers.cookie') ) {
+      fetchOptions.headers['cookie'] = req.headers.cookie;
+    }
+    if ( lodashGet(req, 'headers.authorization') ) {
+      fetchOptions.headers['authorization'] = req.headers.authorization;
+    }
   }
 
   return fetch(path, fetchOptions)
