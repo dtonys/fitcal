@@ -48,13 +48,13 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <img src="http://via.placeholder.com/200x200" />
+            <img src="https://via.placeholder.com/200x200" />
           </Grid>
         </Grid>
         <br /> <br /> <br /> <br />
         <Grid container>
           <Grid item xs={12} sm={6}>
-            <img src="http://via.placeholder.com/200x200" />
+            <img src="https://via.placeholder.com/200x200" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <br /><br />
@@ -85,13 +85,13 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <img src="http://via.placeholder.com/200x200" />
+            <img src="https://via.placeholder.com/200x200" />
           </Grid>
         </Grid>
         <br /> <br /> <br /> <br />
         <Grid container>
           <Grid item xs={12} sm={6}>
-            <img src="http://via.placeholder.com/200x200" />
+            <img src="https://via.placeholder.com/200x200" />
           </Grid>
           <Grid item xs={12} sm={6}>
             <br /><br />
