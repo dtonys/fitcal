@@ -9,7 +9,7 @@ function getPath( req, url, query ) {
     return url + queryString;
   }
   // NOTE: All content is served behind https, hence use https as origin
-  const basePath = req ? (`https://${req.get('host')}`) : '';
+  const basePath = req ? (`${req.protocol}://${req.get('host')}`) : '';
   return basePath + url + queryString;
 }
 
