@@ -16,7 +16,6 @@ import {
 } from 'helpers/validators';
 import {
   showErrorOnBlur,
-  showErrorOnSubmit,
 } from 'helpers/form';
 import {
   SIGNUP_REQUESTED,

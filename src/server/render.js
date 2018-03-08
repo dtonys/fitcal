@@ -50,6 +50,7 @@ function createHtml({
         <div id="root">${appString}</div>
         ${cssHash}
         ${dllScript}
+        <script src="https://js.stripe.com/v3/"></script>
         ${js}
       </body>
     </html>
