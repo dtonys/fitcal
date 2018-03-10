@@ -4,6 +4,7 @@ import {
   SIGNUP_STARTED, SIGNUP_SUCCESS, SIGNUP_ERROR,
   LOGIN_STARTED, LOGIN_SUCCESS, LOGIN_ERROR,
   LOAD_USERS_STARTED, LOAD_USERS_SUCCESS, LOAD_USERS_ERROR,
+  LOAD_PAYMENT_METHOD_STARTED, LOAD_PAYMENT_METHOD_SUCCESS, LOAD_PAYMENT_METHOD_ERROR,
 } from './actions';
 
 
@@ -166,12 +167,49 @@ function usersReducer( state = usersInitialState, action ) {
   }
 }
 
+export function extractPaymentMethodState( globalState ) {
+  return globalState[STORE_KEY].paymentMethod;
+}
+const paymentMethodInitialState = {
+  loading: false,
+  error: null,
+  data: null,
+};
+function paymentMethodReducer( state = usersInitialState, action ) {
+  switch ( action.type ) {
+    case LOAD_PAYMENT_METHOD_STARTED: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case LOAD_PAYMENT_METHOD_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+        error: null,
+      };
+    }
+    case LOAD_PAYMENT_METHOD_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+}
 
 const initialState = {
   user: initialUserState,
   signup: signupInitialState,
   login: loginInitialState,
   users: usersInitialState,
+  paymentMethod: paymentMethodInitialState,
 };
 export default ( state = initialState, action ) => {
   return {
@@ -179,5 +217,6 @@ export default ( state = initialState, action ) => {
     signup: signupReducer( state.signup, action ),
     login: loginReducer( state.login, action ),
     users: usersReducer( state.users, action ),
+    paymentMethod: paymentMethodReducer( state.paymentMethod, action ),
   };
 };

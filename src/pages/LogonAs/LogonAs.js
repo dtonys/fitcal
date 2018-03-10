@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
-import { redirect } from 'redux-first-router';
 import lodashGet from 'lodash/get';
 
 import styles from 'pages/LogonAs/LogonAs.scss';
@@ -11,9 +10,6 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import { clientRequest } from 'helpers/request';
 
-import {
-  ROUTE_SCHEDULE,
-} from 'redux/routesMap';
 
 import {
   required as isRequired,

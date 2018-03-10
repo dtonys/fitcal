@@ -15,8 +15,19 @@ const webpackMerge = require('webpack-merge');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
+const lodashPick = require('lodash/pick');
 const parts = require('./webpack.parts');
+const dotenv = require('dotenv');
 
+
+const envs = dotenv.load({ path: path.resolve(__dirname, '..', '.env') });
+// Expose selected envs to client
+const clientEnvs = lodashPick(envs.parsed, [
+  'STRIPE_API_KEY',
+]);
+Object.keys(clientEnvs).forEach(( key ) => {
+  clientEnvs[key] = JSON.stringify(clientEnvs[key]);
+});
 
 const PATHS = {
   src: path.resolve(__dirname, '..', 'src'),
@@ -80,6 +91,7 @@ const developmentConfig = webpackMerge([
         __SERVER__: 'false',
         __CLIENT__: 'true',
         __TEST__: 'false',
+        ...clientEnvs,
       }),
       new webpack.NamedModulesPlugin(),
       new AutoDllPlugin({
@@ -136,6 +148,7 @@ const productionConfig = webpackMerge([
         __SERVER__: 'false',
         __CLIENT__: 'true',
         __TEST__: 'false',
+        ...clientEnvs,
       }),
       new webpack.HashedModuleIdsPlugin(),
     ],

@@ -35,8 +35,9 @@ export const clientRequest = ( url, options = {}) => {
           .then(( body ) => {
             if ( response.ok ) {
               resolve(body);
+              return;
             }
-            return Promise.reject({
+            Promise.reject({
               ...body,
               status: response.status,
             });

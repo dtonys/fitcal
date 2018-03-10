@@ -14,6 +14,7 @@ import {
   minLength as isMinLength,
   composeValidators,
 } from 'helpers/validators';
+import { clientRequest } from 'helpers/request';
 import {
   showErrorOnBlur,
 } from 'helpers/form';
@@ -28,8 +29,8 @@ import {
 async function checkAvailableUsername( value ) {
   const error = composeValidators(isRequired, isMinLength(3))(value);
   if ( error ) return error;
-  const response = await fetch('/api/username/' + encodeURIComponent(value) + '/available');
-  const { data: available } = await response.json();
+  const response = await clientRequest('/api/username/' + encodeURIComponent(value) + '/available');
+  const available = response.data;
   if ( !available ) {
     return 'Username not available';
   }
@@ -39,8 +40,8 @@ async function checkAvailableUsername( value ) {
 async function checkAvailableEmail( value ) {
   const error = composeValidators(isRequired, isEmail)(value);
   if ( error ) return error;
-  const response = await fetch('/api/email/' + encodeURIComponent(value) + '/available');
-  const { data: available } = await response.json();
+  const response = await clientRequest('/api/email/' + encodeURIComponent(value) + '/available');
+  const available = response.data;
   if ( !available ) {
     return 'Email not available';
   }

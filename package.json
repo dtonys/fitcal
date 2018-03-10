@@ -82,7 +82,6 @@
     "react-final-form": "^3.0.4",
     "react-jss": "^8.2.1",
     "react-redux": "^5.0.6",
-    "react-stripe-elements": "^1.6.0",
     "react-test-renderer": "^16.2.0",
     "react-universal-component": "^2.8.1",
     "recompose": "^0.26.0",

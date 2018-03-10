@@ -9,6 +9,7 @@ import {
   LOGIN_REQUESTED, LOGIN_STARTED, LOGIN_SUCCESS, LOGIN_ERROR,
   SIGNUP_REQUESTED, SIGNUP_STARTED, SIGNUP_SUCCESS, SIGNUP_ERROR,
   LOAD_USERS_REQUESTED, LOAD_USERS_STARTED, LOAD_USERS_SUCCESS, LOAD_USERS_ERROR,
+  LOAD_PAYMENT_METHOD_REQUESTED, LOAD_PAYMENT_METHOD_STARTED, LOAD_PAYMENT_METHOD_SUCCESS, LOAD_PAYMENT_METHOD_ERROR,
 } from './actions';
 import {
   ROUTE_HOME,
@@ -87,6 +88,20 @@ function* loadUsers(action, { request }) {
   }
 }
 
+function* loadPaymentMethod(action, { request }) {
+  yield put({ type: LOAD_PAYMENT_METHOD_STARTED });
+  try {
+    const response = yield call( request, '/api/payment/method');
+    const paymentMethod = lodashGet( response, 'data' );
+    yield put({ type: LOAD_PAYMENT_METHOD_SUCCESS, payload: paymentMethod });
+  }
+  catch ( httpError ) {
+    const httpErrorMessage = lodashGet( httpError, 'data.message' );
+    const errorMessage = httpErrorMessage || httpError.message;
+    yield put({ type: LOAD_PAYMENT_METHOD_ERROR, payload: errorMessage });
+  }
+}
+
 export default function* ( context ) {
   yield all([
     fork( takeOne( LOAD_USER_REQUESTED, loadUser, context ) ),
@@ -94,5 +109,6 @@ export default function* ( context ) {
     fork( takeOne( LOGIN_REQUESTED, login, context ) ),
     fork( takeOne( SIGNUP_REQUESTED, signup, context ) ),
     fork( takeOne( LOAD_USERS_REQUESTED, loadUsers, context ) ),
+    fork( takeOne( LOAD_PAYMENT_METHOD_REQUESTED, loadPaymentMethod, context ) ),
   ]);
 }
