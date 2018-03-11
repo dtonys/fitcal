@@ -26,12 +26,11 @@ import Button from 'material-ui/Button';
 class ProfilePage extends Component { // eslint-disable-line
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
     paymentMethod: PropTypes.object,
   }
   static defaultProps = {
     paymentMethod: null,
-    user: null,
   }
 
   componentDidMount() {
@@ -96,8 +95,6 @@ class ProfilePage extends Component { // eslint-disable-line
 
   render() {
     const { paymentMethod, user } = this.props;
-
-    if ( !user ) return null;
 
     return (
       <div>

@@ -35,6 +35,7 @@ function* logout(action, { request }) {
   yield call(request, '/api/logout');
   yield put({ type: LOGOUT_SUCCESS });
   yield put( redirect({ type: ROUTE_HOME }) );
+  yield put({ type: LOAD_USER_REQUESTED });
 }
 
 function* login(action, { request }) {

@@ -116,7 +116,6 @@ function userReducer( state = initialUserState, action ) {
     case LOGOUT_SUCCESS: {
       return {
         ...state,
-        user: null,
         error: null,
       };
     }
