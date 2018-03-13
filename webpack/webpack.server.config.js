@@ -97,6 +97,18 @@ const commonConfig = webpackMerge([
   }),
 ]);
 
+const DevEnvs = Object.assign(
+  {},
+  {
+    'process.env': {
+      NODE_ENV: JSON.stringify('development'),
+    },
+    __SERVER__: 'true',
+    __CLIENT__: 'false',
+    __TEST__: 'false',
+  },
+  clientEnvs
+);
 const developmentConfig = webpackMerge([
   {
     devtool: 'eval',
@@ -104,32 +116,28 @@ const developmentConfig = webpackMerge([
       publicPath: '/static/',
     },
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('development'),
-        },
-        __SERVER__: 'true',
-        __CLIENT__: 'false',
-        __TEST__: 'false',
-        ...clientEnvs,
-      }),
+      new webpack.DefinePlugin(DevEnvs),
     ],
   },
 ]);
 
+const ProdEnvs = Object.assign(
+  {},
+  {
+    'process.env': {
+      NODE_ENV: JSON.stringify('production'),
+    },
+    __SERVER__: 'true',
+    __CLIENT__: 'false',
+    __TEST__: 'false',
+  },
+  clientEnvs
+);
 const productionConfig = webpackMerge([
   {
     devtool: 'source-map',
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-        },
-        __SERVER__: 'true',
-        __CLIENT__: 'false',
-        __TEST__: 'false',
-        ...clientEnvs,
-      }),
+      new webpack.DefinePlugin(ProdEnvs),
     ],
   },
 ]);

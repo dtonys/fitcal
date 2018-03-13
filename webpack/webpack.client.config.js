@@ -66,6 +66,18 @@ const commonConfig = webpackMerge([
   }),
 ]);
 
+const DevEnvs = Object.assign(
+  {},
+  {
+    'process.env': {
+      NODE_ENV: JSON.stringify('development'),
+    },
+    __SERVER__: 'false',
+    __CLIENT__: 'true',
+    __TEST__: 'false',
+  },
+  clientEnvs
+);
 const developmentConfig = webpackMerge([
   {
     devtool: 'eval',
@@ -84,15 +96,7 @@ const developmentConfig = webpackMerge([
       new WriteFilePlugin(),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('development'),
-        },
-        __SERVER__: 'false',
-        __CLIENT__: 'true',
-        __TEST__: 'false',
-        ...clientEnvs,
-      }),
+      new webpack.DefinePlugin(DevEnvs),
       new webpack.NamedModulesPlugin(),
       new AutoDllPlugin({
         context: path.join(__dirname, '..'),
@@ -127,6 +131,19 @@ const developmentConfig = webpackMerge([
   parts.loadImages(),
 ]);
 
+
+const ProdEnvs = Object.assign(
+  {},
+  {
+    'process.env': {
+      NODE_ENV: JSON.stringify('production'),
+    },
+    __SERVER__: 'false',
+    __CLIENT__: 'true',
+    __TEST__: 'false',
+  },
+  clientEnvs
+);
 const productionConfig = webpackMerge([
   {
     devtool: 'source-map',
@@ -141,15 +158,7 @@ const productionConfig = webpackMerge([
     },
     plugins: [
       new StatsPlugin('stats.json'),
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-        },
-        __SERVER__: 'false',
-        __CLIENT__: 'true',
-        __TEST__: 'false',
-        ...clientEnvs,
-      }),
+      new webpack.DefinePlugin(ProdEnvs),
       new webpack.HashedModuleIdsPlugin(),
     ],
     recordsPath: path.join(__dirname, 'records.json' ),
