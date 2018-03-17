@@ -32,8 +32,8 @@ const { store } = configureStore(window.__INITIAL_STATE__, request, history, Rav
 const userData = extractUserState(store.getState()).user;
 if ( userData ) {
   Raven.setUserContext({
-    email: userData.user.email,
-    id: userData.user._id,
+    email: userData.email,
+    id: userData._id,
   });
 }
 else {
