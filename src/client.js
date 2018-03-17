@@ -10,12 +10,35 @@ import configureStore from 'redux/configureStore';
 import { Provider as ReduxStoreProvider } from 'react-redux';
 import makeRequest from 'helpers/request';
 import createBrowserHistory from 'history/createBrowserHistory';
+import { extractUserState } from 'redux/user/reducer';
+import Raven from 'raven-js';
 
+
+const sentryConfigUrl = process.env.NODE_ENV === 'production'
+  ? SENTRY_CLIENT_CONFIG_URL
+  : false;
+
+Raven.config(sentryConfigUrl);
+if ( process.env.NODE_ENV !== 'production' ) {
+  Raven.debug = false;
+}
+Raven.install();
 
 const theme = createTheme();
 const request = makeRequest();
 const history = createBrowserHistory();
-const { store } = configureStore(window.__INITIAL_STATE__, request, history);
+const { store } = configureStore(window.__INITIAL_STATE__, request, history, Raven);
+
+const userData = extractUserState(store.getState()).user;
+if ( userData ) {
+  Raven.setUserContext({
+    email: userData.user.email,
+    id: userData.user._id,
+  });
+}
+else {
+  Raven.setUserContext();
+}
 
 if ( process.env.NODE_ENV !== 'production' ) {
   window.request = request;

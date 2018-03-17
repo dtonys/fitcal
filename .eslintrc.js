@@ -189,5 +189,6 @@ module.exports = {
     "__TEST__": true,
     "__non_webpack_require__": false,
     "STRIPE_API_KEY": false,
+    "SENTRY_CLIENT_CONFIG_URL": false,
   },
 };

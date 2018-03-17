@@ -2,6 +2,7 @@ import lodashGet from 'lodash/get';
 import { put, call, fork, all, select } from 'redux-saga/effects';
 import { takeOne } from 'redux/sagaHelpers';
 import { redirect } from 'redux-first-router';
+import Raven from 'raven-js';
 
 import {
   LOAD_USER_REQUESTED, LOAD_USER_STARTED, LOAD_USER_SUCCESS, LOAD_USER_ERROR,
@@ -22,6 +23,15 @@ function* loadUser(action, { request }) {
   try {
     const userData = yield call(request, '/api/session');
     const userPayload = lodashGet(userData, 'data.currentUser', null);
+    if ( userPayload ) {
+      Raven.setUserContext({
+        email: userPayload.email,
+        id: userPayload._id,
+      });
+    }
+    else {
+      Raven.setUserContext();
+    }
     yield put({ type: LOAD_USER_SUCCESS, payload: userPayload });
   }
   catch ( httpError ) {

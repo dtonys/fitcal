@@ -107,7 +107,7 @@ function createServerRenderMiddleware({ clientStats }) {
       rootSagaTask,
       routeThunk,
       routeInitialDispatch,
-    } = configureStore({}, request, history);
+    } = configureStore({}, request, history, Raven);
 
     // load initial data - fetch user
     try {

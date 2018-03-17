@@ -45,7 +45,7 @@ function createReduxLogger() {
   return logger;
 }
 
-export default (initialState = {}, request, history) => {
+export default (initialState = {}, request, history, Raven) => {
   const {
     reducer: routeReducer,
     middleware: routeMiddleware,
@@ -65,7 +65,9 @@ export default (initialState = {}, request, history) => {
     const logger = createReduxLogger();
     middleware.push( logger );
   }
-  const sagaMiddleware = createSagaMiddleware();
+  const sagaMiddleware = createSagaMiddleware({
+    onError: (error) => ( Raven.captureException(error) ),
+  });
   middleware.push( sagaMiddleware );
   middleware.push( routeMiddleware );
   const appliedMiddleware = applyMiddleware(...middleware);

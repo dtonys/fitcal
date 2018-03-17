@@ -39,6 +39,10 @@ class LoginPage extends Component {
     this.props.dispatch({ type: LOGIN_REQUESTED, payload: values });
   }
 
+  onError = () => {
+    const a = b;
+  }
+
   render() {
     const {
       login: { error, loading },
@@ -55,6 +59,13 @@ class LoginPage extends Component {
               autoComplete="off"
               data-test="loginForm"
             >
+              <Button
+                onClick={this.onError}
+                raised
+                color="primary"
+              >
+                Spawn Error
+              </Button>
               <Typography type="headline" align="center" gutterBottom >
                 Login
               </Typography>

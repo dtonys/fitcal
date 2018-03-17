@@ -24,6 +24,7 @@ const envs = dotenv.load({ path: path.resolve(__dirname, '..', '.env') });
 // Expose selected envs to client
 const clientEnvs = lodashPick(envs.parsed, [
   'STRIPE_API_KEY',
+  'SENTRY_CLIENT_CONFIG_URL',
 ]);
 Object.keys(clientEnvs).forEach(( key ) => {
   clientEnvs[key] = JSON.stringify(clientEnvs[key]);
