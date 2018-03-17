@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { flushChunkNames } from 'react-universal-component/server';
 import flushChunks from 'webpack-flush-chunks';
+import Raven from 'raven';
 
 import { MuiThemeProvider, createGenerateClassName } from 'material-ui/styles';
 import Reboot from 'material-ui/Reboot';
@@ -20,6 +21,22 @@ import { LOAD_USER_SUCCESS } from 'redux/user/actions';
 
 import App from 'components/App/App';
 
+
+function serveInternalServerErrorPage( req, res ) {
+  res.status(500);
+  res.send(`
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title> Internal Server Error </title>
+      </head>
+      <body>
+        Internal Server Error
+      </body>
+    </html>
+  `);
+}
 
 function createHtml({
   js,
@@ -73,6 +90,12 @@ function renderApp( sheetsRegistry, store ) {
   return appRoot;
 }
 
+function handleServerRenderError( error, req, res ) {
+  console.error(error); // eslint-disable-line no-console
+  Raven.captureException(error);
+  serveInternalServerErrorPage(req, res);
+}
+
 function createServerRenderMiddleware({ clientStats }) {
   return async (req, res, next) => {
     let appString = null;
@@ -93,7 +116,7 @@ function createServerRenderMiddleware({ clientStats }) {
       store.dispatch({ type: LOAD_USER_SUCCESS, payload: userPayload });
     }
     catch ( error ) {
-      next(error);
+      handleServerRenderError( error, req, res );
       return;
     }
 
@@ -109,7 +132,13 @@ function createServerRenderMiddleware({ clientStats }) {
 
     // await on route thunk
     if ( routeThunk ) {
-      await routeThunk(store);
+      try {
+        await routeThunk(store);
+      }
+      catch ( error ) {
+        handleServerRenderError( error, req, res );
+        return;
+      }
     }
 
     // check for redirect triggered later
@@ -127,10 +156,9 @@ function createServerRenderMiddleware({ clientStats }) {
       const appInstance = renderApp(sheetsRegistry, store);
       appString = ReactDOM.renderToString( appInstance );
     }
-    catch ( err ) {
-      console.log('ReactDOM.renderToString error'); // eslint-disable-line no-console
-      console.log(err); // eslint-disable-line no-console
-      next(err);
+    catch ( error ) {
+      console.error('ReactDOM.renderToString error'); // eslint-disable-line no-console
+      handleServerRenderError( error, req, res );
       return;
     }
     const initialState = store.getState();

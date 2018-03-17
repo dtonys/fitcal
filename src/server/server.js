@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import Raven from 'raven';
+import serializeError from 'serialize-error';
 
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -17,7 +19,44 @@ import path from 'path';
 import createProxy from 'server/apiProxy';
 
 
-const DEV = process.env.NODE_ENV !== 'production';
+function setupErrorHandling() {
+  // setup sentry error reporting, only in production environment
+  const ravenConfigUrl = process.env.NODE_ENV === 'production'
+    ? process.env.SENTRY_CONFIG_URL
+    : false;
+
+  Raven.config(ravenConfigUrl).install();
+
+  // Ensure that unhandledRejection is logged and exits the server
+  process.on('unhandledRejection', (error) => {
+    console.error('unhandledRejection'); // eslint-disable-line no-console
+    console.error(error); // eslint-disable-line no-console
+    Raven.captureException(error, ( /* sendErr, eventId */ ) => {
+      process.exit(1);
+    });
+  });
+}
+
+// NOTE: We're going to override the default express middleware
+function handleErrorMiddleware( err, req, res, next ) { // eslint-disable-line no-unused-vars
+  console.error('handleErrorMiddleware'); // eslint-disable-line no-console
+  console.error(err); // eslint-disable-line no-console
+
+  // In production, hide the error, return a generic `internal_server_error` response
+  if ( process.env.NODE_ENV === 'production' ) {
+    res.status(500);
+    res.json({
+      internal_server_error: true,
+    });
+    return;
+  }
+  // In development, expose the error details to the client
+  res.status(500);
+  res.json({
+    internal_server_error: true,
+    ...serializeError(err),
+  });
+}
 
 function setupWebackDevMiddleware(app) {
   const clientConfig = clientConfigFactory('development');
@@ -53,7 +92,7 @@ async function setupWebpack( app ) {
   const clientConfig = clientConfigFactory('development');
   const publicPath = clientConfig.output.publicPath;
   const outputPath = clientConfig.output.path;
-  if ( DEV ) {
+  if ( process.env.NODE_ENV !== 'production' ) {
     await setupWebackDevMiddleware(app);
   }
   else {
@@ -65,32 +104,6 @@ async function setupWebpack( app ) {
   }
 }
 
-function handleErrorMiddleware( err, req, res, next ) {
-  // NOTE: Add additional handling for errors here
-  console.log(err); // eslint-disable-line no-console
-  // Pass to express' default error handler, which will return
-  // `Internal Server Error` when `process.env.NODE_ENV === production` and
-  // a stack trace otherwise
-  next(err);
-}
-
-function handleUncaughtErrors() {
-  process.on('uncaughtException', ( error ) => {
-    // NOTE: Add additional handling for uncaught exceptions here
-    console.log('uncaughtException'); // eslint-disable-line no-console
-    console.log(error); // eslint-disable-line no-console
-    process.exit(1);
-  });
-  // NOTE: Treat promise rejections the same as an uncaught error,
-  // as both can be invoked by a JS error
-  process.on('unhandledRejection', ( error ) => {
-    // NOTE: Add handling for uncaught rejections here
-    console.log('unhandledRejection'); // eslint-disable-line no-console
-    console.log(error); // eslint-disable-line no-console
-    process.exit(1);
-  });
-}
-
 function startServer( app ) {
   return new Promise((resolve, reject) => {
     app.listen(process.env.SERVER_PORT, (err) => {
@@ -98,7 +111,6 @@ function startServer( app ) {
         console.log(err); // eslint-disable-line no-console
         reject(err);
       }
-      handleUncaughtErrors();
       console.log(colors.black.bold('⚫⚫')); // eslint-disable-line no-console
       console.log(colors.black.bold(`⚫⚫ Web server listening on port ${process.env.SERVER_PORT}...`)); // eslint-disable-line no-console
       console.log(colors.black.bold('⚫⚫\n')); // eslint-disable-line no-console
@@ -148,9 +160,15 @@ async function bootstrap() {
     offlineMode = true;
   }
 
+  // setup error logging
+  setupErrorHandling();
+
   const app = express();
 
   // middleware
+  if ( process.env.NODE_ENV === 'production' ) {
+    app.use(Raven.requestHandler());
+  }
   app.use( express.static('public') );
   app.all('/favicon.*', (req, res) => {
     res.status(404).end();
@@ -162,8 +180,6 @@ async function bootstrap() {
   app.use(compression());
   app.use(cookieParser());
 
-  app.use(handleErrorMiddleware);
-
   // Send dummy JSON response if offline
   if ( offlineMode ) {
     app.all('/api/*', (req, res) => res.send({}));
@@ -172,7 +188,13 @@ async function bootstrap() {
   app.all('/api/*', createProxy( process.env.API_URL ));
 
   await setupWebpack(app);
+
+  if ( process.env.NODE_ENV === 'production' ) {
+    app.use(Raven.errorHandler());
+  }
+  app.use(handleErrorMiddleware);
   await startServer(app);
+
 }
 
 bootstrap()
