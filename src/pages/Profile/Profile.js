@@ -139,11 +139,18 @@ class ProfilePage extends Component { // eslint-disable-line
             </Button>
           </span>
         }
-        <Link to="/subscribe">
-          <Button raised color="primary" style={{ marginRight: '10px' }}>
-            { 'Connect Stripe Account' }
+        { user.stripe_connect_user_id &&
+          <Button raised disabled color="primary" style={{ marginRight: '10px' }}>
+            { 'Connected' }
           </Button>
-        </Link>
+        }
+        { !user.stripe_connect_user_id &&
+          <Link to="/subscribe">
+            <Button raised color="primary" style={{ marginRight: '10px' }}>
+              { 'Connect Stripe Account' }
+            </Button>
+          </Link>
+        }
         <br /> <br />
         <Divider />
         <br />

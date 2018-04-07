@@ -88,12 +88,8 @@ class PlatformSubscribePage extends Component {
     });
   }
 
-  stripeConnect = () => {
-    alert('Stripe Connect Flow');
-  }
-
   render() {
-    const { subscribed } = this.props.user;
+    const { subscribed, stripe_connect_user_id } = this.props.user;
     const { amount, interval } = standardPlan;
 
     return (
@@ -129,14 +125,27 @@ class PlatformSubscribePage extends Component {
         <br /><br />
         <Divider />
         <br /><br />
-        <Button
-          raised
-          color="primary"
-          type="submit"
-          onClick={this.stripeConnect}
-        >
-          Connect Stripe Account
-        </Button>
+        { stripe_connect_user_id &&
+          <Button
+            raised
+            color="primary"
+            type="submit"
+            disabled
+          >
+            Connected
+          </Button>
+        }
+        { !stripe_connect_user_id &&
+          <a href="/api/stripe/connect">
+            <Button
+              raised
+              color="primary"
+              type="submit"
+            >
+              Connect Stripe Account
+            </Button>
+          </a>
+        }
       </div>
     );
   }

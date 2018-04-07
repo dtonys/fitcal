@@ -47,7 +47,7 @@ module.exports = {
     'brace-style': [ 'warn', 'stroustrup', {
       'allowSingleLine': true
     }],
-    'camelcase': 'warn',
+    'camelcase': 'never',
     'comma-dangle': [ 'warn', 'always-multiline' ],
     'computed-property-spacing': 'off',
     'func-names': 'warn',

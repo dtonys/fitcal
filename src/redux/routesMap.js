@@ -44,6 +44,7 @@ const routesMap = {
   },
   [ROUTE_SCHEDULE]: {
     path: '/schedule',
+    loggedInOnly: true,
   },
   [ROUTE_PLATFORM_SUBSCRIBE]: {
     path: '/subscribe',
