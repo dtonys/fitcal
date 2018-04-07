@@ -126,14 +126,9 @@ class PlatformSubscribePage extends Component {
         <Divider />
         <br /><br />
         { stripe_connect_user_id &&
-          <Button
-            raised
-            color="primary"
-            type="submit"
-            disabled
-          >
-            Connected
-          </Button>
+          <Typography type="subheading" color="primary" align="center" gutterBottom >
+            Your Stripe account is connected to the platform!
+          </Typography>
         }
         { !stripe_connect_user_id &&
           <a href="/api/stripe/connect">
