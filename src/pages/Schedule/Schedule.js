@@ -10,6 +10,7 @@ import {
 import {
   required as isRequired,
 } from 'helpers/validators';
+import { convertFormValuesToApiFormat } from 'helpers/form';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
@@ -154,29 +155,6 @@ const eventFields = [
 // Conditionally show these fields
 const showMap = {
   price_dollars: ( values ) => ( Boolean( values.payment && values.payment !== 'Free' )),
-};
-const convertFormValuesToApiFormat = ( values ) => {
-  const apiValues = {
-    ...values,
-  };
-
-  // convert dollars to cents
-  [
-    [ 'price_dollars', 'price_cents' ],
-  ].forEach(( pair ) => {
-    const [ dollarsKey, centsKey ] = pair;
-    apiValues[centsKey] = ( values[dollarsKey]
-      ? values[dollarsKey] + '00'
-      : '0'
-    );
-    delete apiValues[dollarsKey];
-  });
-
-  // serialize date to ISO format, for the API
-  [ 'start', 'end' ].forEach(( dateField ) => {
-    apiValues[dateField] = values[dateField].toISOString();
-  });
-  return apiValues;
 };
 const convertApiValuesToFormFormat = ( eventItem ) => {
   const formValues = {

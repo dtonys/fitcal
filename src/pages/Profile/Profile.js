@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import Link from 'redux-first-router-link';
+import TextInput from 'components/TextInput/TextInput';
+import FormModal from 'components/FormModal/FormModal';
 import {
   extractUserState,
   extractPaymentMethodState,
@@ -15,6 +17,49 @@ import {
 } from 'redux/user/actions';
 import { appendScriptToHead } from 'helpers/domUtils';
 import Button from 'material-ui/Button';
+import {
+  required as isRequired,
+} from 'helpers/validators';
+import {
+  dollars as normalizeDollars,
+  number as normalizeNumber,
+} from 'helpers/normalizers';
+import {
+  CREATE_MEMBERSHIP_REQUESTED,
+} from 'redux/membership/actions';
+import { convertFormValuesToApiFormat } from 'helpers/form';
+
+
+const commonProps = {
+  margin: 'dense',
+  fullWidth: true,
+  style: { marginBottom: '10px' },
+  validate: isRequired,
+};
+const textFieldProps = {
+  component: TextInput,
+  type: 'text',
+  ...commonProps,
+};
+const membershipFields = [
+  {
+    name: 'name',
+    ...textFieldProps,
+  },
+  {
+    name: 'description',
+    ...textFieldProps,
+  },
+  {
+    component: TextInput,
+    name: 'price_dollars',
+    label: 'monthly subscription price',
+    type: 'text',
+    parse: normalizeNumber,
+    format: normalizeDollars,
+    ...commonProps,
+  },
+];
 
 
 @connect(
@@ -31,6 +76,16 @@ class ProfilePage extends Component { // eslint-disable-line
   }
   static defaultProps = {
     paymentMethod: null,
+  }
+
+  constructor( props ) {
+    super(props);
+    this.state = {
+      modalOpen: false,
+      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
+      modalTitle: 'Create Membership',
+      initialValues: null,
+    };
   }
 
   componentDidMount() {
@@ -93,9 +148,28 @@ class ProfilePage extends Component { // eslint-disable-line
     }
   }
 
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  }
 
+  openCreateModal = () => {
+    this.setState({
+      modalOpen: true,
+      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
+      modalTitle: 'Create Membership',
+      initialValues: null,
+    });
+  }
 
   render() {
+    const {
+      modalOpen,
+      modalActionType,
+      modalTitle,
+      initialValues,
+    } = this.state;
     const { paymentMethod, user } = this.props;
 
     return (
@@ -184,9 +258,22 @@ class ProfilePage extends Component { // eslint-disable-line
           {'My Memberships'}
         </Typography>
         <br />
-        <Button raised color="primary" >
+        <Button
+          raised
+          color="primary"
+          onClick={this.openCreateModal}
+        >
           { 'Create Membership' }
         </Button>
+        <FormModal
+          open={modalOpen}
+          close={this.closeModal}
+          submitActionType={modalActionType}
+          title={modalTitle}
+          fields={membershipFields}
+          convertFormValuesToApiFormat={convertFormValuesToApiFormat}
+          initialValues={initialValues}
+        />
         <br /><br /><br />
       </div>
     );
