@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Typography from 'material-ui/Typography';
-import EventList from 'components/EventList/EventList';
+import ResourceList from 'components/ResourceList/ResourceList';
 import {
   LOAD_USER_EVENTS_REQUESTED,
 } from 'redux/event/actions';
@@ -54,9 +54,9 @@ class UserSchedulePage extends Component {
         <Typography type="title" color="primary" gutterBottom >
           {`${username} schedule`}
         </Typography>
-        <EventList
+        <ResourceList
           onJoinClick={this.joinEventRedirect}
-          eventList={userEvents}
+          resourceList={userEvents}
         />
       </div>
     );

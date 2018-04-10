@@ -6,29 +6,29 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 
-const EventList = ({
-  eventList,
+const ResourceList = ({
+  resourceList,
   onEditClick,
   onDeleteClick,
   onJoinClick,
 }) => {
   return (
     <List>
-      {eventList.map((event) => (
-        <div key={event._id} >
+      {resourceList.map((resource) => (
+        <div key={resource._id} >
           <ListItem
             dense
           >
             <ListItemText
-              primary={event.name}
-              secondary={event.start_date.toString()}
+              primary={resource.name}
+              secondary={resource.createdAt.toString()}
             />
             { onEditClick &&
               <Button
                 raised
                 color="primary"
                 style={{ marginRight: '10px' }}
-                data-resource-id={event._id}
+                data-resource-id={resource._id}
                 onClick={onEditClick}
               >Edit
               </Button>
@@ -37,7 +37,7 @@ const EventList = ({
               <Button
                 raised
                 color="primary"
-                data-resource-id={event._id}
+                data-resource-id={resource._id}
                 onClick={onDeleteClick}
               >Delete
               </Button>
@@ -46,9 +46,9 @@ const EventList = ({
               <Button
                 raised
                 color="primary"
-                data-resource-id={event._id}
-                disabled={!event.can_join}
-                onClick={event.can_join ? onJoinClick : null}
+                data-resource-id={resource._id}
+                disabled={!resource.can_join}
+                onClick={resource.can_join ? onJoinClick : null}
               >Join
               </Button>
             }
@@ -59,16 +59,16 @@ const EventList = ({
     </List>
   );
 };
-EventList.propTypes = {
-  eventList: PropTypes.array.isRequired,
+ResourceList.propTypes = {
+  resourceList: PropTypes.array.isRequired,
   onEditClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
   onJoinClick: PropTypes.func,
 };
-EventList.defaultProps = {
+ResourceList.defaultProps = {
   onEditClick: null,
   onDeleteClick: null,
   onJoinClick: null,
 };
 
-export default EventList;
+export default ResourceList;

@@ -89,7 +89,7 @@ class PlatformSubscribePage extends Component {
   }
 
   render() {
-    const { subscribed, stripe_connect_user_id } = this.props.user;
+    const { subscribed, connected } = this.props.user;
     const { amount, interval } = standardPlan;
 
     return (
@@ -125,12 +125,12 @@ class PlatformSubscribePage extends Component {
         <br /><br />
         <Divider />
         <br /><br />
-        { stripe_connect_user_id &&
+        { connected &&
           <Typography type="subheading" color="primary" align="center" gutterBottom >
             Your Stripe account is connected to the platform!
           </Typography>
         }
-        { !stripe_connect_user_id &&
+        { !connected &&
           <a href="/api/stripe/connect">
             <Button
               raised

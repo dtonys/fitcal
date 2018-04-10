@@ -19,7 +19,7 @@ import FormModal from 'components/FormModal/FormModal';
 import TextInput from 'components/TextInput/TextInput';
 import SelectInput from 'components/SelectInput/SelectInput';
 import DateInput from 'components/DateInput/DateInput';
-import EventList from 'components/EventList/EventList';
+import ResourceList from 'components/ResourceList/ResourceList';
 import {
   CREATE_EVENT_REQUESTED,
   DELETE_EVENT_REQUESTED,
@@ -307,17 +307,17 @@ class SchedulePage extends Component {
         <Typography type="title" color="primary" gutterBottom >
           {'My Events'}
         </Typography>
-        <EventList
+        <ResourceList
           onEditClick={this.openEditModal}
           onDeleteClick={this.confirmDelete}
-          eventList={createdEvents}
+          resourceList={createdEvents}
         />
         <br /><br />
         <Typography type="title" color="primary" gutterBottom >
           {'Joined Events'}
         </Typography>
-        <EventList
-          eventList={joinedEvents}
+        <ResourceList
+          resourceList={joinedEvents}
         />
       </div>
     );

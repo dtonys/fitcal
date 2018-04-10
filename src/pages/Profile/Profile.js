@@ -93,6 +93,8 @@ class ProfilePage extends Component { // eslint-disable-line
     }
   }
 
+
+
   render() {
     const { paymentMethod, user } = this.props;
 
@@ -111,6 +113,12 @@ class ProfilePage extends Component { // eslint-disable-line
         <Button raised color="primary" style={{ marginRight: '10px' }}>
           { 'Deactivate account' }
         </Button>
+        <Link to={`/users/${user.username}`}>
+          <Button raised color="primary" style={{ marginRight: '10px' }}>
+            { 'View Public Profile' }
+          </Button>
+        </Link>
+
         <br /> <br />
         <Divider />
         <br />
@@ -139,12 +147,12 @@ class ProfilePage extends Component { // eslint-disable-line
             </Button>
           </span>
         }
-        { user.stripe_connect_user_id &&
+        { user.connected &&
           <Button raised disabled color="primary" style={{ marginRight: '10px' }}>
             { 'Connected' }
           </Button>
         }
-        { !user.stripe_connect_user_id &&
+        { !user.connected &&
           <Link to="/subscribe">
             <Button raised color="primary" style={{ marginRight: '10px' }}>
               { 'Connect Stripe Account' }
@@ -168,6 +176,16 @@ class ProfilePage extends Component { // eslint-disable-line
         <br />
         <Button raised color="primary" style={{ marginRight: '10px' }} onClick={this.onUpdatePaymentMethod} >
           { 'Update Payment Method' }
+        </Button>
+        <br /><br /><br />
+        <Divider />
+        <br />
+        <Typography type="title" color="primary" gutterBottom >
+          {'My Memberships'}
+        </Typography>
+        <br />
+        <Button raised color="primary" >
+          { 'Create Membership' }
         </Button>
         <br /><br /><br />
       </div>
