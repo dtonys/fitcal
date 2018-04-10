@@ -5,6 +5,7 @@ import { takeOne } from 'redux/sagaHelpers';
 import {
   CREATE_MEMBERSHIP_STARTED, CREATE_MEMBERSHIP_SUCCESS, CREATE_MEMBERSHIP_ERROR, CREATE_MEMBERSHIP_REQUESTED,
   DELETE_MEMBERSHIP_STARTED, DELETE_MEMBERSHIP_SUCCESS, DELETE_MEMBERSHIP_ERROR, DELETE_MEMBERSHIP_REQUESTED,
+  LOAD_MY_MEMBERSHIPS_STARTED, LOAD_MY_MEMBERSHIPS_SUCCESS, LOAD_MY_MEMBERSHIPS_ERROR, LOAD_MY_MEMBERSHIPS_REQUESTED,
 } from 'redux/membership/actions';
 
 
@@ -40,10 +41,23 @@ function* _delete( action, { request } ) {
   }
 }
 
+function* loadMyMemberships( action, { request } ) {
+  yield put({ type: LOAD_MY_MEMBERSHIPS_STARTED });
+  try {
+    const response = yield call( request, '/api/memberships' );
+    yield put({ type: LOAD_MY_MEMBERSHIPS_SUCCESS, payload: response.data.items });
+  }
+  catch ( httpError ) {
+    const httpErrorMessage = lodashGet( httpError, 'error.message' );
+    const errorMessage = httpErrorMessage || httpError.message;
+    yield put({ type: LOAD_MY_MEMBERSHIPS_ERROR, payload: errorMessage });
+  }
+}
 
 export default function* ( context ) {
   yield all([
     fork( takeOne( CREATE_MEMBERSHIP_REQUESTED, create, context ) ),
     fork( takeOne( DELETE_MEMBERSHIP_REQUESTED, _delete, context ) ),
+    fork( takeOne( LOAD_MY_MEMBERSHIPS_REQUESTED, loadMyMemberships, context ) ),
   ]);
 }

@@ -9,7 +9,7 @@ import {
 const TextInput = ({
   input,
   meta,
-  showError = showErrorOnSubmit,
+  showError,
   ...rest
 }) => {
   const errorVisible = showError(meta);
@@ -27,6 +27,10 @@ const TextInput = ({
 TextInput.propTypes = {
   input: PropTypes.object.isRequired,
   meta: PropTypes.object.isRequired,
+  showError: PropTypes.func,
+};
+TextInput.defaultProps = {
+  showError: showErrorOnSubmit,
 };
 
 export default TextInput;

@@ -15,6 +15,7 @@ import Button from 'material-ui/Button';
 @connect()
 class FormModal extends Component {
   static propTypes = {
+    modalContext: PropTypes.string,
     open: PropTypes.bool.isRequired,
     close: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
@@ -23,12 +24,15 @@ class FormModal extends Component {
     convertFormValuesToApiFormat: PropTypes.func,
     showMap: PropTypes.object,
     initialValues: PropTypes.object,
+    disabledOnEditFields: PropTypes.array,
     dispatch: PropTypes.func.isRequired,
   }
   static defaultProps = {
+    modalContext: null,
     convertFormValuesToApiFormat: null,
     showMap: {},
     initialValues: null,
+    disabledOnEditFields: null,
   }
 
   submitForm = ( values ) => {
@@ -48,12 +52,14 @@ class FormModal extends Component {
 
   render() {
     const {
+      modalContext,
       open,
       close,
       title,
       fields,
       showMap,
       initialValues,
+      disabledOnEditFields,
     } = this.props;
 
     return (
@@ -85,12 +91,22 @@ class FormModal extends Component {
                     if ( showMap[field.name] && !showMap[field.name](values) ) {
                       return null;
                     }
+                    let fieldDisabled = false;
+                    // fields disabled on edit
+                    if (
+                      modalContext === 'edit' &&
+                      disabledOnEditFields.indexOf(field.name) !== -1
+                    ) {
+                      fieldDisabled = true;
+                    }
+
                     return (
                       <Field
                         {...field}
                         key={field.name}
                         id={field.name}
                         label={field.label || field.name}
+                        disabled={fieldDisabled}
                       />
                     );
                   }) }

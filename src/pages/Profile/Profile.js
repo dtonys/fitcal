@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import lodashFind from 'lodash/find';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import Link from 'redux-first-router-link';
 import TextInput from 'components/TextInput/TextInput';
 import FormModal from 'components/FormModal/FormModal';
+import ResourceList from 'components/ResourceList/ResourceList';
 import {
   extractUserState,
   extractPaymentMethodState,
@@ -26,7 +28,9 @@ import {
 } from 'helpers/normalizers';
 import {
   CREATE_MEMBERSHIP_REQUESTED,
+  LOAD_MY_MEMBERSHIPS_REQUESTED,
 } from 'redux/membership/actions';
+import { extractMyMembershipsState } from 'redux/membership/reducer';
 import { convertFormValuesToApiFormat } from 'helpers/form';
 
 
@@ -60,7 +64,125 @@ const membershipFields = [
     ...commonProps,
   },
 ];
+const disabledOnEditFields = [ 'price_dollars' ];
 
+function convertApiValuesToFormFormat( membershipItem ) {
+  const formValues = {
+    name: membershipItem.name,
+    description: membershipItem.description,
+    price_dollars: (membershipItem.price_cents / 100).toString(),
+  };
+  return formValues;
+}
+
+@connect(
+  ( globalState ) => ({
+    myMemberships: extractMyMembershipsState(globalState).items,
+  })
+)
+class MyMemberships extends Component {
+
+  static propTypes = {
+    myMemberships: PropTypes.array.isRequired,
+    dispatch: PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalContext: 'create',
+      modalOpen: false,
+      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
+      modalTitle: 'Create Membership',
+      initialValues: null,
+    };
+  }
+
+  // NOTE: Load on server for real use case
+  componentDidMount() {
+    this.props.dispatch({ type: LOAD_MY_MEMBERSHIPS_REQUESTED });
+  }
+
+  openCreateModal = () => {
+    this.setState({
+      modalOpen: true,
+      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
+      modalTitle: 'Create Membership',
+      initialValues: null,
+    });
+  }
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  }
+
+  openEditModal = ( event ) => {
+    const id = event.currentTarget.getAttribute('data-resource-id');
+    const eventItem = lodashFind(this.props.myMemberships, { _id: id }, null);
+
+    const initialFormValues = convertApiValuesToFormFormat(eventItem);
+    initialFormValues.id = id;
+
+    this.setState({
+      modalContext: 'edit',
+      modalOpen: true,
+      // modalActionType: UPDATE_EVENT_REQUESTED,
+      modalTitle: 'Edit Event',
+      initialValues: initialFormValues,
+    });
+  }
+
+  confirmDelete = ( event ) => {
+    alert('confirmDelete');
+  }
+
+  render() {
+    const {
+      modalContext,
+      modalOpen,
+      modalActionType,
+      modalTitle,
+      initialValues,
+    } = this.state;
+    const { myMemberships } = this.props;
+
+    return (
+      <div>
+        <Typography type="title" color="primary" gutterBottom >
+          {'My Memberships'}
+        </Typography>
+        <br />
+        <Button
+          raised
+          color="primary"
+          onClick={this.openCreateModal}
+        >
+          { 'Create Membership' }
+        </Button>
+        <FormModal
+          modalContext={modalContext}
+          open={modalOpen}
+          close={this.closeModal}
+          submitActionType={modalActionType}
+          title={modalTitle}
+          fields={membershipFields}
+          convertFormValuesToApiFormat={convertFormValuesToApiFormat}
+          initialValues={initialValues}
+          disabledOnEditFields={disabledOnEditFields}
+        />
+        <br /><br />
+        <ResourceList
+          resourceList={myMemberships}
+          onEditClick={this.openEditModal}
+          onDeleteClick={this.confirmDelete}
+        />
+        <br /><br /><br />
+      </div>
+    );
+  }
+}
 
 @connect(
   ( globalState ) => ({
@@ -76,16 +198,6 @@ class ProfilePage extends Component { // eslint-disable-line
   }
   static defaultProps = {
     paymentMethod: null,
-  }
-
-  constructor( props ) {
-    super(props);
-    this.state = {
-      modalOpen: false,
-      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
-      modalTitle: 'Create Membership',
-      initialValues: null,
-    };
   }
 
   componentDidMount() {
@@ -148,28 +260,8 @@ class ProfilePage extends Component { // eslint-disable-line
     }
   }
 
-  closeModal = () => {
-    this.setState({
-      modalOpen: false,
-    });
-  }
-
-  openCreateModal = () => {
-    this.setState({
-      modalOpen: true,
-      modalActionType: CREATE_MEMBERSHIP_REQUESTED,
-      modalTitle: 'Create Membership',
-      initialValues: null,
-    });
-  }
-
   render() {
-    const {
-      modalOpen,
-      modalActionType,
-      modalTitle,
-      initialValues,
-    } = this.state;
+
     const { paymentMethod, user } = this.props;
 
     return (
@@ -252,29 +344,13 @@ class ProfilePage extends Component { // eslint-disable-line
           { 'Update Payment Method' }
         </Button>
         <br /><br /><br />
-        <Divider />
-        <br />
-        <Typography type="title" color="primary" gutterBottom >
-          {'My Memberships'}
-        </Typography>
-        <br />
-        <Button
-          raised
-          color="primary"
-          onClick={this.openCreateModal}
-        >
-          { 'Create Membership' }
-        </Button>
-        <FormModal
-          open={modalOpen}
-          close={this.closeModal}
-          submitActionType={modalActionType}
-          title={modalTitle}
-          fields={membershipFields}
-          convertFormValuesToApiFormat={convertFormValuesToApiFormat}
-          initialValues={initialValues}
-        />
-        <br /><br /><br />
+        { user.connected &&
+          <div>
+            <Divider />
+            <br />
+            <MyMemberships />
+          </div>
+        }
       </div>
     );
   }
