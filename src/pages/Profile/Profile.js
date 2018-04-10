@@ -28,6 +28,7 @@ import {
 } from 'helpers/normalizers';
 import {
   CREATE_MEMBERSHIP_REQUESTED,
+  UPDATE_MEMBERSHIP_REQUESTED,
   LOAD_MY_MEMBERSHIPS_REQUESTED,
 } from 'redux/membership/actions';
 import { extractMyMembershipsState } from 'redux/membership/reducer';
@@ -105,6 +106,7 @@ class MyMemberships extends Component {
 
   openCreateModal = () => {
     this.setState({
+      modalContext: 'create',
       modalOpen: true,
       modalActionType: CREATE_MEMBERSHIP_REQUESTED,
       modalTitle: 'Create Membership',
@@ -128,8 +130,8 @@ class MyMemberships extends Component {
     this.setState({
       modalContext: 'edit',
       modalOpen: true,
-      // modalActionType: UPDATE_EVENT_REQUESTED,
-      modalTitle: 'Edit Event',
+      modalActionType: UPDATE_MEMBERSHIP_REQUESTED,
+      modalTitle: 'Edit Membership',
       initialValues: initialFormValues,
     });
   }

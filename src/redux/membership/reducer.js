@@ -1,12 +1,15 @@
 import {
   CREATE_MEMBERSHIP_STARTED, CREATE_MEMBERSHIP_SUCCESS, CREATE_MEMBERSHIP_ERROR,
+  UPDATE_MEMBERSHIP_STARTED, UPDATE_MEMBERSHIP_SUCCESS, UPDATE_MEMBERSHIP_ERROR,
   DELETE_MEMBERSHIP_STARTED, DELETE_MEMBERSHIP_SUCCESS, DELETE_MEMBERSHIP_ERROR,
   LOAD_MY_MEMBERSHIPS_STARTED, LOAD_MY_MEMBERSHIPS_SUCCESS, LOAD_MY_MEMBERSHIPS_ERROR,
 } from 'redux/membership/actions';
 
+
 const crudApiReducer = ( state, action ) => {
   switch ( action.type ) {
     case CREATE_MEMBERSHIP_STARTED:
+    case UPDATE_MEMBERSHIP_STARTED:
     case DELETE_MEMBERSHIP_STARTED: {
       return {
         ...state,
@@ -14,6 +17,7 @@ const crudApiReducer = ( state, action ) => {
       };
     }
     case CREATE_MEMBERSHIP_SUCCESS:
+    case UPDATE_MEMBERSHIP_SUCCESS:
     case DELETE_MEMBERSHIP_SUCCESS: {
       return {
         ...state,
@@ -22,6 +26,7 @@ const crudApiReducer = ( state, action ) => {
       };
     }
     case CREATE_MEMBERSHIP_ERROR:
+    case UPDATE_MEMBERSHIP_ERROR:
     case DELETE_MEMBERSHIP_ERROR: {
       return {
         ...state,
@@ -66,6 +71,7 @@ const listApiReducer = ( state, action ) => {
 
 export const STORE_KEY = 'membership';
 const CREATE_KEY = 'create';
+const UPDATE_KEY = 'update';
 const DELETE_KEY = 'delete';
 const MY_MEMBERSHIPS_KEY = 'myMemberships';
 
@@ -74,6 +80,9 @@ export function extractState( globalState ) {
 }
 export function extractCreateMembershipState( globalState ) {
   return globalState[STORE_KEY][CREATE_KEY];
+}
+export function extractUpdateMembershipState( globalState ) {
+  return globalState[STORE_KEY][UPDATE_KEY];
 }
 export function extractDeleteMembershipState( globalState ) {
   return globalState[STORE_KEY][DELETE_KEY];
@@ -92,12 +101,14 @@ const listInitialState = {
 };
 const initialState =  {
   [CREATE_KEY]: apiInitialState,
+  [UPDATE_KEY]: apiInitialState,
   [DELETE_KEY]: apiInitialState,
   [MY_MEMBERSHIPS_KEY]: listInitialState,
 };
 
 function mapCrudActionToStateKey( actionType ) {
   if ( actionType.indexOf( 'CREATE_' ) === 0 ) return CREATE_KEY;
+  if ( actionType.indexOf( 'UPDATE_' ) === 0 ) return UPDATE_KEY;
   if ( actionType.indexOf( 'DELETE_' ) === 0 ) return DELETE_KEY;
   return undefined;
 }
