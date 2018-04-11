@@ -99,32 +99,6 @@ class PlatformSubscribePage extends Component {
         </Typography>
         <Divider />
         <br /><br />
-        <div style={{ textAlign: 'left' }} >
-          <pre> { JSON.stringify(standardPlan, null, 4) } </pre>
-        </div>
-        { subscribed &&
-          <Typography type="subheading" color="primary" align="center" gutterBottom >
-            You are subscribed to the platform!
-          </Typography>
-        }
-        { !subscribed &&
-          <div>
-            <Typography type="subheading" color="primary" align="center" gutterBottom >
-              {`Join for $${(amount / 100).toFixed(2)} / ${interval}`}
-            </Typography>
-            <Button
-              raised
-              color="primary"
-              type="submit"
-              onClick={this.onSubmit}
-            >
-              Subscribe to Platform
-            </Button>
-          </div>
-        }
-        <br /><br />
-        <Divider />
-        <br /><br />
         { connected &&
           <Typography type="subheading" color="primary" align="center" gutterBottom >
             Your Stripe account is connected to the platform!

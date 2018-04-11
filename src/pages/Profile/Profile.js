@@ -160,7 +160,6 @@ class MyMemberships extends Component {
         <Typography type="title" color="primary" gutterBottom >
           {'My Memberships'}
         </Typography>
-        <br />
         <Button
           raised
           color="primary"
@@ -276,16 +275,6 @@ class ProfilePage extends Component { // eslint-disable-line
         <Typography type="title" color="primary" gutterBottom >
           {'Profile Actions'}
         </Typography>
-        <br />
-        <Button raised color="primary" style={{ marginRight: '10px' }}>
-          { 'Change Avatar Photo' }
-        </Button>
-        <Button raised color="primary" style={{ marginRight: '10px' }} >
-          { 'Change Profile Settings' }
-        </Button>
-        <Button raised color="primary" style={{ marginRight: '10px' }}>
-          { 'Deactivate account' }
-        </Button>
         <Link to={`/users/${user.username}`}>
           <Button raised color="primary" style={{ marginRight: '10px' }}>
             { 'View Public Profile' }
@@ -298,32 +287,21 @@ class ProfilePage extends Component { // eslint-disable-line
         <Typography type="title" color="primary" gutterBottom >
           {'Account Actions'}
         </Typography>
-        { !user.subscribed &&
-          <Link to="/subscribe">
-            <Button raised color="primary" style={{ marginRight: '10px' }}>
-              { 'Subscribe to Platform' }
-            </Button>
-          </Link>
-        }
-        { user.subscribed &&
-          <span>
-            <Button raised color="primary" style={{ marginRight: '10px' }} disabled>
-              { 'Subscribed' }
-            </Button>
-            <Button
-              raised
-              color="primary"
-              style={{ marginRight: '10px' }}
-              onClick={this.cancelSubscription}
-            >
-              { 'Cancel your subscription' }
-            </Button>
-          </span>
-        }
         { user.connected &&
-          <Button raised disabled color="primary" style={{ marginRight: '10px' }}>
-            { 'Connected' }
-          </Button>
+          <span>
+            <Button raised disabled color="primary" style={{ marginRight: '10px' }}>
+              { 'Connected' }
+            </Button>
+            <a href="/api/stripe/express-dashboard">
+              <Button
+                raised
+                color="primary"
+                style={{ marginRight: '10px' }}
+              >
+                { 'Visit Express Dashboard' }
+              </Button>
+            </a>
+          </span>
         }
         { !user.connected &&
           <Link to="/subscribe">
@@ -332,23 +310,23 @@ class ProfilePage extends Component { // eslint-disable-line
             </Button>
           </Link>
         }
+
         <br /> <br />
         <Divider />
         <br />
         <Typography type="title" color="primary" gutterBottom >
           {'Payment'}
         </Typography>
-        <br />
-
-        <Typography type="subheading" color="primary" align="left" gutterBottom >
-          Your card details:
-        </Typography>
         { paymentMethod &&
-          <pre> {JSON.stringify(paymentMethod, null, 4)} </pre>
+          <span>
+            <Typography type="subheading" color="primary" align="left" gutterBottom >
+              Your card details:
+            </Typography>
+            <pre> {JSON.stringify(paymentMethod, null, 4)} </pre>
+          </span>
         }
-        <br />
         <Button raised color="primary" style={{ marginRight: '10px' }} onClick={this.onUpdatePaymentMethod} >
-          { 'Update Payment Method' }
+          { paymentMethod ? 'Update Payment Method' : 'Add Payment Method' }
         </Button>
         <br /><br /><br />
         { user.connected &&
