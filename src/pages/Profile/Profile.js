@@ -30,6 +30,7 @@ import {
   CREATE_MEMBERSHIP_REQUESTED,
   UPDATE_MEMBERSHIP_REQUESTED,
   LOAD_MY_MEMBERSHIPS_REQUESTED,
+  DELETE_MEMBERSHIP_REQUESTED,
 } from 'redux/membership/actions';
 import { extractMyMembershipsState } from 'redux/membership/reducer';
 import { convertFormValuesToApiFormat } from 'helpers/form';
@@ -137,7 +138,11 @@ class MyMemberships extends Component {
   }
 
   confirmDelete = ( event ) => {
-    alert('confirmDelete');
+    const id = event.currentTarget.getAttribute('data-resource-id');
+    const result = confirm('Are you sure you want to delete this item?'); // eslint-disable-line no-alert
+    if ( result ) {
+      this.props.dispatch({ type: DELETE_MEMBERSHIP_REQUESTED, payload: id });
+    }
   }
 
   render() {

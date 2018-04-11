@@ -4,9 +4,9 @@ import { takeOne } from 'redux/sagaHelpers';
 
 import {
   CREATE_MEMBERSHIP_STARTED, CREATE_MEMBERSHIP_SUCCESS, CREATE_MEMBERSHIP_ERROR, CREATE_MEMBERSHIP_REQUESTED,
-  DELETE_MEMBERSHIP_STARTED, DELETE_MEMBERSHIP_SUCCESS, DELETE_MEMBERSHIP_ERROR, DELETE_MEMBERSHIP_REQUESTED,
   LOAD_MY_MEMBERSHIPS_STARTED, LOAD_MY_MEMBERSHIPS_SUCCESS, LOAD_MY_MEMBERSHIPS_ERROR, LOAD_MY_MEMBERSHIPS_REQUESTED,
   UPDATE_MEMBERSHIP_STARTED, UPDATE_MEMBERSHIP_SUCCESS, UPDATE_MEMBERSHIP_ERROR, UPDATE_MEMBERSHIP_REQUESTED,
+  DELETE_MEMBERSHIP_STARTED, DELETE_MEMBERSHIP_SUCCESS, DELETE_MEMBERSHIP_ERROR, DELETE_MEMBERSHIP_REQUESTED,
 } from 'redux/membership/actions';
 
 
@@ -30,7 +30,7 @@ function* create( action, { request } ) {
 function* _delete( action, { request } ) {
   yield put({ type: DELETE_MEMBERSHIP_STARTED });
   try {
-    // yield call( request, `/api/events/${action.payload}`, { method: 'DELETE' });
+    yield call( request, `/api/memberships/${action.payload}`, { method: 'DELETE' });
     yield put({ type: DELETE_MEMBERSHIP_SUCCESS });
     yield put({ type: LOAD_MY_MEMBERSHIPS_REQUESTED });
   }
