@@ -171,6 +171,7 @@ export function extractPaymentMethodState( globalState ) {
 }
 const paymentMethodInitialState = {
   loading: false,
+  loaded: false,
   error: null,
   data: null,
 };
@@ -180,12 +181,14 @@ function paymentMethodReducer( state = usersInitialState, action ) {
       return {
         ...state,
         loading: true,
+        loaded: false,
       };
     }
     case LOAD_PAYMENT_METHOD_SUCCESS: {
       return {
         ...state,
         loading: false,
+        loaded: true,
         data: action.payload,
         error: null,
       };
@@ -194,6 +197,7 @@ function paymentMethodReducer( state = usersInitialState, action ) {
       return {
         ...state,
         loading: false,
+        loaded: true,
         error: action.payload,
       };
     }

@@ -41,6 +41,7 @@ const routesMap = {
   },
   [ROUTE_PROFILE]: {
     path: '/profile',
+    loggedInOnly: true,
   },
   [ROUTE_SCHEDULE]: {
     path: '/schedule',

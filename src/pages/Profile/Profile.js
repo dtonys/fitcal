@@ -15,7 +15,7 @@ import {
 import { clientRequest } from 'helpers/request';
 import {
   LOAD_PAYMENT_METHOD_REQUESTED,
-  LOAD_USER_REQUESTED
+  LOAD_USER_REQUESTED,
 } from 'redux/user/actions';
 import { appendScriptToHead } from 'helpers/domUtils';
 import Button from 'material-ui/Button';
@@ -209,7 +209,11 @@ class ProfilePage extends Component { // eslint-disable-line
   componentDidMount() {
     this.props.dispatch({ type: LOAD_PAYMENT_METHOD_REQUESTED });
     window.addEventListener('onpopstate', this.closeStripeCheckout);
-    appendScriptToHead('https://checkout.stripe.com/checkout.js', this.onCheckoutScriptLoaded );
+    if ( !window.StripeCheckout ) {
+      appendScriptToHead('https://checkout.stripe.com/checkout.js', this.onCheckoutScriptLoaded );
+      return;
+    }
+    this.onCheckoutScriptLoaded();
   }
 
   componentWillUnmount() {

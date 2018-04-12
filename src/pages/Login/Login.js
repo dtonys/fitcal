@@ -112,6 +112,15 @@ class LoginPage extends Component {
                   Forgot Password?
                 </Typography>
               </Link>
+              <br />
+              <Link to="/signup">
+                <Typography
+                  type="body1"
+                  align="left"
+                >
+                  {'Don\'t have an account? Sign up to get access.'}
+                </Typography>
+              </Link>
             </form>
           )}
         </Form>
