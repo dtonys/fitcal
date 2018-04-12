@@ -14,7 +14,6 @@ import {
 } from 'redux/user/reducer';
 import { clientRequest } from 'helpers/request';
 import {
-  LOAD_USER_REQUESTED,
   LOAD_PAYMENT_METHOD_REQUESTED,
 } from 'redux/user/actions';
 import { appendScriptToHead } from 'helpers/domUtils';
@@ -252,18 +251,6 @@ class ProfilePage extends Component { // eslint-disable-line
       .then(() => {
         this.props.dispatch({ type: LOAD_PAYMENT_METHOD_REQUESTED });
       });
-  }
-
-  cancelSubscription = () => {
-    const confirmed = confirm('Are you sure you want to cancel your subscription?'); // eslint-disable-line
-    if ( confirmed ) {
-      clientRequest('/api/platform/unsubscribe', {
-        method: 'POST',
-      })
-        .then(() => {
-          this.props.dispatch({ type: LOAD_USER_REQUESTED });
-        });
-    }
   }
 
   render() {
