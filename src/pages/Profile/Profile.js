@@ -15,6 +15,7 @@ import {
 import { clientRequest } from 'helpers/request';
 import {
   LOAD_PAYMENT_METHOD_REQUESTED,
+  LOAD_USER_REQUESTED
 } from 'redux/user/actions';
 import { appendScriptToHead } from 'helpers/domUtils';
 import Button from 'material-ui/Button';
@@ -253,6 +254,18 @@ class ProfilePage extends Component { // eslint-disable-line
       });
   }
 
+  stripeDisconnect = () => {
+    const result = confirm('Are you sure you want to disconnect from the platform?'); // eslint-disable-line no-alert
+    if ( result ) {
+      clientRequest('/api/stripe/disconnect', {
+        method: 'POST',
+      })
+        .then(() => {
+          this.props.dispatch({ type: LOAD_USER_REQUESTED });
+        });
+    }
+  }
+
   render() {
 
     const { paymentMethod, user } = this.props;
@@ -288,6 +301,14 @@ class ProfilePage extends Component { // eslint-disable-line
                 { 'Visit Express Dashboard' }
               </Button>
             </a>
+            <Button
+              raised
+              color="primary"
+              style={{ marginRight: '10px' }}
+              onClick={this.stripeDisconnect}
+            >
+              { 'Disconnect from Platform' }
+            </Button>
           </span>
         }
         { !user.connected &&
