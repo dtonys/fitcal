@@ -10,6 +10,7 @@ const ResourceList = ({
   resourceList,
   onEditClick,
   onDeleteClick,
+  onUnsubscribeClick,
   onJoinClick,
 }) => {
   return (
@@ -52,6 +53,15 @@ const ResourceList = ({
               >Join
               </Button>
             }
+            { onUnsubscribeClick &&
+              <Button
+                raised
+                color="primary"
+                data-resource-id={resource._id}
+                onClick={onUnsubscribeClick}
+              >Unsubscribe
+              </Button>
+            }
           </ListItem>
           <Divider />
         </div>
@@ -63,11 +73,13 @@ ResourceList.propTypes = {
   resourceList: PropTypes.array.isRequired,
   onEditClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
+  onUnsubscribeClick: PropTypes.func,
   onJoinClick: PropTypes.func,
 };
 ResourceList.defaultProps = {
   onEditClick: null,
   onDeleteClick: null,
+  onUnsubscribeClick: null,
   onJoinClick: null,
 };
 

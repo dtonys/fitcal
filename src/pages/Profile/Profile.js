@@ -77,6 +77,60 @@ function convertApiValuesToFormFormat( membershipItem ) {
   return formValues;
 }
 
+
+class MySubscriptions extends Component {
+  static propTypes = {
+  }
+
+  constructor( props ) {
+    super(props);
+    this.state = {
+      subscribedMemberships: [],
+    };
+  }
+
+  componentDidMount() {
+    this.loadSubscriptions();
+  }
+
+  loadSubscriptions = () => {
+    clientRequest('/api/subscriptions')
+      .then(( requestBody ) => {
+        this.setState({
+          subscribedMemberships: requestBody.data,
+        });
+      });
+  }
+
+  onUnsubscribe = () => {
+    const unsubscribeConfirmed = confirm(`Are you sure you want to unsubscribe?
+Your membership will be terminated immediately, and you will be removed from all events connected to this membership.
+    `);
+    if ( unsubscribeConfirmed ) {
+      alert('onUnsubscribe');
+      // fire unsubscribe API
+      // loadSubscriptions()
+    }
+  }
+
+  render() {
+    const { subscribedMemberships } = this.state;
+
+    return (
+      <div>
+        <Typography type="title" color="primary" gutterBottom >
+          {'My Subscriptions'}
+        </Typography>
+        <ResourceList
+          resourceList={subscribedMemberships}
+          onUnsubscribeClick={this.onUnsubscribe}
+        />
+        <br /><br />
+      </div>
+    );
+  }
+}
+
 @connect(
   ( globalState ) => ({
     myMemberships: extractMyMembershipsState(globalState).items,
@@ -167,6 +221,12 @@ class MyMemberships extends Component {
         >
           { 'Create Membership' }
         </Button>
+        <br /><br />
+        <ResourceList
+          resourceList={myMemberships}
+          onEditClick={this.openEditModal}
+          onDeleteClick={this.confirmDelete}
+        />
         <FormModal
           modalContext={modalContext}
           open={modalOpen}
@@ -178,13 +238,7 @@ class MyMemberships extends Component {
           initialValues={initialValues}
           disabledOnEditFields={disabledOnEditFields}
         />
-        <br /><br />
-        <ResourceList
-          resourceList={myMemberships}
-          onEditClick={this.openEditModal}
-          onDeleteClick={this.confirmDelete}
-        />
-        <br /><br /><br />
+        <br />
       </div>
     );
   }
@@ -348,6 +402,9 @@ class ProfilePage extends Component { // eslint-disable-line
             <MyMemberships />
           </div>
         }
+        <Divider />
+        <br />
+        <MySubscriptions />
       </div>
     );
   }
