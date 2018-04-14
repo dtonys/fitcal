@@ -79,8 +79,6 @@ function convertApiValuesToFormFormat( membershipItem ) {
 
 
 class MySubscriptions extends Component {
-  static propTypes = {
-  }
 
   constructor( props ) {
     super(props);
@@ -102,14 +100,18 @@ class MySubscriptions extends Component {
       });
   }
 
-  onUnsubscribe = () => {
+  onUnsubscribe = ( event ) => {
     const unsubscribeConfirmed = confirm(`Are you sure you want to unsubscribe?
 Your membership will be terminated immediately, and you will be removed from all events connected to this membership.
     `);
     if ( unsubscribeConfirmed ) {
-      alert('onUnsubscribe');
-      // fire unsubscribe API
-      // loadSubscriptions()
+      const id = event.currentTarget.getAttribute('data-resource-id');
+      clientRequest(`/api/memberships/${id}/unsubscribe`, {
+        method: 'POST',
+      })
+        .then(() => {
+          this.loadSubscriptions();
+        });
     }
   }
 

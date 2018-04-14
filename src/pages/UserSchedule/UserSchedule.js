@@ -54,7 +54,11 @@ class UserSchedulePage extends Component {
       type: LOAD_USER_EVENTS_REQUESTED,
       payload: username,
     });
-    // load memberships
+    this.loadMemberships();
+  }
+
+  loadMemberships = () => {
+    const { username } = this.props;
     clientRequest(`/api/${username}/memberships`)
       .then((body) => {
         this.setState({
@@ -100,6 +104,10 @@ class UserSchedulePage extends Component {
     this.showSubscribeModal(membership);
   }
 
+  onSubscribeSuccess = () => {
+    this.loadMemberships();
+  }
+
   render() {
     const {
       userEvents,
@@ -133,6 +141,7 @@ class UserSchedulePage extends Component {
           close={this.closeSubscribeModal}
           title="Subscribe to Membership"
           membership={selectedMembership}
+          onSubscribeSuccess={this.onSubscribeSuccess}
         >
           SubscribeModal
         </SubscribeModal>
