@@ -102,20 +102,18 @@ class SubscribeModal extends Component { // eslint-disable-line
   }
 
   subscribeToMembership = ( token ) => {
-    // const { membership, close } = this.props;
-    alert('subscribeToMembership: ' + JSON.stringify(token, null, 2));
-
-    // clientRequest(`/api/memberships/${membership._id}/subscribe`, {
-    //   method: 'POST',
-    //   body: {
-    //     token: token || undefined,
-    //   },
-    // })
-    //   .then(() => {
-    //     this.props.dispatch({ type: LOAD_USER_REQUESTED });
-    //     this.closeStripeCheckout();
-    //     close();
-    //   });
+    const { membership, close } = this.props;
+    clientRequest(`/api/memberships/${membership._id}/subscribe`, {
+      method: 'POST',
+      body: {
+        token: token || undefined,
+      },
+    })
+      .then(() => {
+        this.props.dispatch({ type: LOAD_USER_REQUESTED });
+        this.closeStripeCheckout();
+        close();
+      });
   }
 
   render() {
