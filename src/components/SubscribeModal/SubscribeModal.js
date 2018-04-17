@@ -15,7 +15,6 @@ import {
 } from 'redux/user/reducer';
 import {
   LOAD_PAYMENT_METHOD_REQUESTED,
-  LOAD_USER_REQUESTED,
 } from 'redux/user/actions';
 import { appendScriptToHead } from 'helpers/domUtils';
 
@@ -34,12 +33,14 @@ class SubscribeModal extends Component { // eslint-disable-line
     title: PropTypes.string.isRequired,
     membership: PropTypes.object,
     user: PropTypes.object.isRequired,
+    onSubscribeSuccess: PropTypes.func,
     dispatch: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     paymentMethodState: null,
     membership: null,
+    onSubscribeSuccess: () => {},
   }
 
   componentDidUpdate( prevProps /* , prevState */ ) {
@@ -102,7 +103,7 @@ class SubscribeModal extends Component { // eslint-disable-line
   }
 
   subscribeToMembership = ( token ) => {
-    const { membership, close } = this.props;
+    const { membership, close, onSubscribeSuccess } = this.props;
     clientRequest(`/api/memberships/${membership._id}/subscribe`, {
       method: 'POST',
       body: {
@@ -110,9 +111,9 @@ class SubscribeModal extends Component { // eslint-disable-line
       },
     })
       .then(() => {
-        this.props.dispatch({ type: LOAD_USER_REQUESTED });
         this.closeStripeCheckout();
         close();
+        onSubscribeSuccess();
       });
   }
 

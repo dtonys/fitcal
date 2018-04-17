@@ -47,6 +47,14 @@ class PlatformSubscribePage extends Component {
         }
         { !connected &&
           <a href="/api/stripe/connect">
+            <Typography type="subheading" color="primary" align="center" gutterBottom >
+              {`
+Team Sweetcheecks uses Stripe to get you paid quickly and keep your personal and payment information secure.
+Thousands of companies around the world trust Stripe to process payments for their users.
+Set up a Stripe account to get paid with Team Sweetcheecks.
+              `}
+            </Typography>
+
             <Button
               raised
               color="primary"
