@@ -83,7 +83,7 @@ class MySubscriptions extends Component {
   constructor( props ) {
     super(props);
     this.state = {
-      subscribedMemberships: [],
+      subscriptions: [],
     };
   }
 
@@ -94,8 +94,16 @@ class MySubscriptions extends Component {
   loadSubscriptions = () => {
     clientRequest('/api/subscriptions')
       .then(( requestBody ) => {
+        const subscriptionViews = requestBody.data.map((sub) => {
+          return {
+            ...sub,
+            name: sub.membership.name,
+            description: sub.membership.name,
+          };
+        });
+
         this.setState({
-          subscribedMemberships: requestBody.data,
+          subscriptions: subscriptionViews,
         });
       });
   }
@@ -106,7 +114,7 @@ Your membership will be terminated immediately, and you will be removed from all
     `);
     if ( unsubscribeConfirmed ) {
       const id = event.currentTarget.getAttribute('data-resource-id');
-      clientRequest(`/api/memberships/${id}/unsubscribe`, {
+      clientRequest(`/api/subscriptions/${id}/unsubscribe`, {
         method: 'POST',
       })
         .then(() => {
@@ -116,7 +124,7 @@ Your membership will be terminated immediately, and you will be removed from all
   }
 
   render() {
-    const { subscribedMemberships } = this.state;
+    const { subscriptions } = this.state;
 
     return (
       <div>
@@ -124,7 +132,7 @@ Your membership will be terminated immediately, and you will be removed from all
           {'My Subscriptions'}
         </Typography>
         <ResourceList
-          resourceList={subscribedMemberships}
+          resourceList={subscriptions}
           onUnsubscribeClick={this.onUnsubscribe}
         />
         <br /><br />

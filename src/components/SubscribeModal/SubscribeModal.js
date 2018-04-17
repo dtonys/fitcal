@@ -43,6 +43,13 @@ class SubscribeModal extends Component { // eslint-disable-line
     onSubscribeSuccess: () => {},
   }
 
+  constructor( props ) {
+    super(props);
+    this.state = {
+      submitting: false,
+    };
+  }
+
   componentDidUpdate( prevProps /* , prevState */ ) {
     // on open, load payment method
     const modalOpened = (!prevProps.open && this.props.open);
@@ -104,6 +111,10 @@ class SubscribeModal extends Component { // eslint-disable-line
 
   subscribeToMembership = ( token ) => {
     const { membership, close, onSubscribeSuccess } = this.props;
+    this.setState({
+      submitting: true,
+    });
+
     clientRequest(`/api/memberships/${membership._id}/subscribe`, {
       method: 'POST',
       body: {
@@ -111,6 +122,9 @@ class SubscribeModal extends Component { // eslint-disable-line
       },
     })
       .then(() => {
+        this.setState({
+          submitting: false,
+        });
         this.closeStripeCheckout();
         close();
         onSubscribeSuccess();
@@ -125,6 +139,7 @@ class SubscribeModal extends Component { // eslint-disable-line
       membership,
       paymentMethodState,
     } = this.props;
+    const { submitting } = this.state;
 
     const hasPaymentMethod = Boolean(paymentMethodState.data);
 
@@ -144,7 +159,12 @@ class SubscribeModal extends Component { // eslint-disable-line
           <Button onClick={close} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.onSubscribeClick} type="submit" color="primary">
+          <Button
+            type="submit"
+            color="primary"
+            onClick={this.onSubscribeClick}
+            disabled={submitting}
+          >
             { hasPaymentMethod ? 'Pay and Subscribe' : 'Enter payment method' }
           </Button>
         </DialogActions>
