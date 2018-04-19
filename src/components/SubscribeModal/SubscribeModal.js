@@ -118,7 +118,7 @@ class SubscribeModal extends Component { // eslint-disable-line
     clientRequest(`/api/memberships/${membership._id}/subscribe`, {
       method: 'POST',
       body: {
-        token: token || undefined,
+        token: token ? token.id : undefined,
       },
     })
       .then(() => {

@@ -11,7 +11,7 @@ const CENTS_KEY = 'price_cents';
 
 // Convert dollars to cents. Add cents key, delete dollars key.  Returns updated values.
 export function dollarsToCents( formValues ) {
-  if ( !formValues[DOLLARS_KEY] ) return null;
+  if ( !formValues[DOLLARS_KEY] ) return formValues;
   const updatedFormValues = {
     ...formValues,
   };
