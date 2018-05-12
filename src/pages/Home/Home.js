@@ -76,7 +76,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Create events for your digital or physical business'}
+              {'Setup physical or digital events'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
@@ -97,7 +97,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Risk free platform fee'}
+              {'Risk free 10% platform fee'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
