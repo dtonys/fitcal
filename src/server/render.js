@@ -56,7 +56,7 @@ function createHtml({
     <html>
       <head>
         <meta charset="utf-8">
-        <title> universal-web-boilerplate </title>
+        <title> fitcal </title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <style id="jss-server-side">${muiCss}</style>

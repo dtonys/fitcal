@@ -23,7 +23,7 @@ class PlatformSubscribePage extends Component {
     event.preventDefault();
     const { email } = this.props.user;
     this.stripeCheckoutHandler.open({
-      name: 'Team Sweetcheecks',
+      name: 'Fitcal',
       description: 'Platform Membership',
       amount: 100,
       email,
@@ -49,9 +49,9 @@ class PlatformSubscribePage extends Component {
           <a href="/api/stripe/connect">
             <Typography type="subheading" color="primary" align="center" gutterBottom >
               {`
-Team Sweetcheecks uses Stripe to get you paid quickly and keep your personal and payment information secure.
+Fitcal uses Stripe to get you paid quickly and keep your personal and payment information secure.
 Thousands of companies around the world trust Stripe to process payments for their users.
-Set up a Stripe account to get paid with Team Sweetcheecks.
+Set up a Stripe account to get paid with Fitcal.
               `}
             </Typography>
 

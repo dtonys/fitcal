@@ -297,7 +297,7 @@ class ProfilePage extends Component { // eslint-disable-line
     event.preventDefault();
     const { email } = this.props.user;
     this.stripeCheckoutHandler.open({
-      name: 'Team Sweetcheecks',
+      name: 'Fitcal',
       panelLabel: 'Update Card',
       description: 'Update Payment Method',
       email,

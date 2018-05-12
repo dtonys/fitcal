@@ -29,7 +29,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
       <div className={ styles.wrap } >
         <div className={ styles.headline } >
           <Typography type="display1" color="primary" gutterBottom >
-            {'The ultra intuitive scheduling app for any fitness business.'}
+            {'The simplest way to manage your finess business'}
           </Typography>
         </div>
         <br /> <br />
@@ -39,12 +39,13 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Schedule pricing, payments, and all the rest.'}
+              {'Create memberships with ease'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
-              {`Create a schedule and customize membership plans.
-                We take care of everything in between for your studio to run smoothly.`}
+              {`Create as many memberships as you want.
+                You choose the price, location, and duration.
+              `}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -59,14 +60,14 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Get more signups'}
+              {'Setting up payment has never been simpler'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
-              {`Our frictionless app lets clients signup easily
-                for one-time, recurring, or multiple purchases!
-                Use friendly client tools to keep track of their progress,
-                set a curriculum, and celebrate their wins.`}
+              {`Connect your bank account with Stripe to get paid.
+                View your dashboard to see incoming payments and payouts.
+                Get notified whenever a customer pays for a service.
+              `}
             </Typography>
           </Grid>
         </Grid>
@@ -75,13 +76,13 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Optimize your schedule.'}
+              {'Create events for your digital or physical business'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
-              {`We provide schedule suggestions that help you easily manage and
-                coordinate staff availabilities.  Create recurring sessions,
-                appointment openings, and time-offs.`}
+              {`We support entrepenuers with all types of businesses.
+                Whether it's a one on one, group webinar, or meetup, our event system
+                provides the flexibility to get you started in minutes.`}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -96,28 +97,27 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
-              {'Run reports and promos.'}
+              {'Risk free platform fee'}
             </Typography>
             <br />
             <Typography type="body1" color="primary" align="left" gutterBottom >
-              {`Know how you are doing MoM, YoY with our financial track tool.
-                Set up promos and special deals for any occassion.`}
+              {`
+                We charge you a flat 10% fee for all money you earn on the platform.
+                Pay nothing until you start making money.
+                You can try out the platform without commitment or obligation.
+              `}
             </Typography>
           </Grid>
         </Grid>
         <br /> <br /> <br /> <br />
         <div className={ styles.headline } >
-          <Typography type="title" color="primary" gutterBottom >
-            {'One flat fee. Unlimited users.'}
-          </Typography>
-          <br /> <br />
           <Link to="/signup">
             <Button
               raised
               color="primary"
               type="submit"
             >
-              Create Schedule
+              Signup Today
             </Button>
           </Link>
           <br /> <br /> <br /> <br />

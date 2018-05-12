@@ -57,7 +57,7 @@ class Navbar extends Component {
                   color: '#000',
                 }}
               >
-                Team Sweetcheecks
+                Fitcal
               </Link>
             </Typography>
             { user &&
