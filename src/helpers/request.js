@@ -25,7 +25,7 @@ export const clientRequest = ( url, options = {}) => {
     options.body = JSON.stringify(options.body);
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve /*, reject */) => {
     fetch(url, {
       ...defaults,
       ...options,
