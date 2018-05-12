@@ -37,6 +37,9 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
         <br /> <br />
         <Grid container>
           <Grid item xs={12} sm={6}>
+            <img src="https://via.placeholder.com/200x200" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
               {'Create memberships with ease'}
@@ -47,9 +50,6 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                 You choose the price, location, and duration.
               `}
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <img src="https://via.placeholder.com/200x200" />
           </Grid>
         </Grid>
         <br /> <br /> <br /> <br />
@@ -74,6 +74,9 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
         <br /> <br /> <br /> <br />
         <Grid container>
           <Grid item xs={12} sm={6}>
+            <img src="https://via.placeholder.com/200x200" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <br /><br />
             <Typography type="title" color="primary" align="left" gutterBottom >
               {'Setup physical or digital events'}
@@ -84,9 +87,6 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                 Whether it's a one on one, group webinar, or meetup, our event system
                 provides the flexibility to get you started in minutes.`}
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <img src="https://via.placeholder.com/200x200" />
           </Grid>
         </Grid>
         <br /> <br /> <br /> <br />
